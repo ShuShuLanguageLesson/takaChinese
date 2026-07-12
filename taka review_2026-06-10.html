@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐼 しゅうしゅう先生の復習クイズ｜6/10宿題</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bamboo:#4E8D5B;
+    --bamboo-deep:#2F6B3C;
+    --bamboo-pale:#EAF4EC;
+    --ink:#2B2B2B;
+    --paper:#FDFBF4;
+    --peach:#F2836B;
+    --peach-deep:#D95F45;
+    --sky:#1663C7;
+    --gold:#F5B301;
+    --wrong:#C94F4F;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:"Zen Maru Gothic","M PLUS Rounded 1c","Hiragino Maru Gothic ProN",sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(78,141,91,.10) 0 140px, transparent 141px),
+      radial-gradient(circle at 90% 92%, rgba(242,131,107,.10) 0 160px, transparent 161px),
+      var(--paper);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;justify-content:center;
+    padding:16px;
+  }
+  .app{width:100%;max-width:560px;}
+
+  /* ---------- header ---------- */
+  header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .brand{font-weight:900;font-size:15px;color:var(--bamboo-deep);letter-spacing:.02em;}
+  .brand small{display:block;font-size:11px;font-weight:700;color:#8a8a80;letter-spacing:.05em;}
+  .hud{margin-left:auto;display:flex;gap:8px;}
+  .pill{background:#fff;border:2px solid var(--bamboo-pale);border-radius:999px;
+    padding:5px 12px;font-weight:800;font-size:13px;box-shadow:0 2px 0 rgba(47,107,60,.10);}
+  .pill .lbl{font-size:10px;color:#8a8a80;display:block;line-height:1;}
+  .pill .val{color:var(--bamboo-deep);font-size:15px;line-height:1.2;}
+  #comboPill .val{color:var(--peach-deep);}
+
+  /* ---------- progress: bamboo ---------- */
+  .bamboo{display:flex;gap:4px;margin:0 0 14px;}
+  .seg{flex:1;height:10px;border-radius:6px;background:#E4E0D2;position:relative;transition:background .3s;}
+  .seg.done{background:linear-gradient(180deg,#6FAE7C,var(--bamboo));}
+  .seg.now{background:var(--gold);animation:pulse 1.2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+
+  /* ---------- panda ---------- */
+  .stage{display:flex;align-items:flex-end;gap:12px;margin-bottom:10px;min-height:96px;}
+  .panda{width:88px;height:88px;flex:none;transition:transform .25s;}
+  .panda.jump{animation:jump .5s;}
+  .panda.shake{animation:shake .4s;}
+  @keyframes jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px) rotate(-4deg)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .bubble{background:#fff;border:2px solid var(--bamboo-pale);border-radius:16px;border-bottom-left-radius:4px;
+    padding:10px 14px;font-size:14px;font-weight:700;line-height:1.5;flex:1;
+    box-shadow:0 3px 0 rgba(47,107,60,.08);}
+  .bubble b{color:var(--peach-deep);}
+
+  /* ---------- card ---------- */
+  .card{background:#fff;border-radius:var(--radius);padding:20px 18px 18px;
+    box-shadow:0 6px 18px rgba(47,60,47,.10);}
+  .qtag{display:inline-block;background:var(--bamboo-pale);color:var(--bamboo-deep);
+    font-size:11px;font-weight:900;letter-spacing:.08em;border-radius:999px;padding:4px 12px;margin-bottom:10px;}
+  .qtext{font-size:17px;font-weight:800;line-height:1.6;margin-bottom:16px;}
+  .qtext .jp{color:var(--peach-deep);}
+
+  .opts{display:grid;gap:10px;}
+  .opt{
+    font-family:inherit;text-align:left;font-size:16.5px;font-weight:700;line-height:1.5;
+    background:var(--paper);border:2.5px solid #E4E0D2;border-radius:14px;
+    padding:12px 14px;cursor:pointer;transition:transform .12s,border-color .15s,background .15s;
+    color:var(--ink);
+  }
+  .opt:hover:not(:disabled){border-color:var(--bamboo);transform:translateY(-2px);}
+  .opt:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  .opt:disabled{cursor:default;}
+  .opt.correct{background:#EAF7EC;border-color:var(--bamboo);color:var(--bamboo-deep);}
+  .opt.picked-wrong{background:#FBECEC;border-color:var(--wrong);color:var(--wrong);}
+  .opt.dim{opacity:.45;}
+  .opt .mark{float:right;font-weight:900;}
+
+  /* ---------- explanation ---------- */
+  .explain{display:none;margin-top:14px;background:var(--bamboo-pale);border-radius:14px;
+    padding:12px 14px;font-size:13.5px;line-height:1.7;}
+  .explain.show{display:block;animation:fadeUp .3s;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .explain .zh{font-size:16px;font-weight:800;color:var(--sky);}
+  .speak{display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+    font-family:inherit;font-size:12.5px;font-weight:800;color:#fff;background:var(--bamboo);
+    border:none;border-radius:999px;padding:7px 14px;cursor:pointer;}
+  .speak:hover{background:var(--bamboo-deep);}
+  .next{display:none;width:100%;margin-top:14px;font-family:inherit;font-size:16px;font-weight:900;
+    color:#fff;background:var(--peach);border:none;border-radius:14px;padding:14px;cursor:pointer;
+    box-shadow:0 4px 0 var(--peach-deep);transition:transform .1s;}
+  .next:active{transform:translateY(3px);box-shadow:0 1px 0 var(--peach-deep);}
+  .next.show{display:block;}
+
+  /* ---------- screens ---------- */
+  .screen{display:none;}
+  .screen.active{display:block;}
+  .title-card{background:#fff;border-radius:var(--radius);padding:32px 22px;text-align:center;
+    box-shadow:0 6px 18px rgba(47,60,47,.10);}
+  .title-card h1{font-size:24px;font-weight:900;color:var(--bamboo-deep);line-height:1.4;margin:12px 0 6px;}
+  .title-card p{font-size:13.5px;color:#6d6d64;line-height:1.8;}
+  .big-panda{width:130px;height:130px;margin:0 auto;}
+  .start{margin-top:22px;font-family:inherit;font-size:18px;font-weight:900;color:#fff;
+    background:var(--bamboo);border:none;border-radius:16px;padding:16px 44px;cursor:pointer;
+    box-shadow:0 5px 0 var(--bamboo-deep);transition:transform .1s;}
+  .start:active{transform:translateY(4px);box-shadow:0 1px 0 var(--bamboo-deep);}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px;}
+  .chip{font-size:11.5px;font-weight:800;color:var(--bamboo-deep);background:var(--bamboo-pale);
+    border-radius:999px;padding:4px 10px;}
+
+  .rank{font-size:30px;font-weight:900;margin:8px 0 2px;}
+  .score-big{font-size:52px;font-weight:900;color:var(--peach-deep);line-height:1;}
+  .score-big small{font-size:16px;color:#8a8a80;}
+  .review{margin-top:18px;text-align:left;}
+  .review h3{font-size:13px;color:#8a8a80;margin-bottom:8px;}
+  .review-item{background:var(--paper);border-radius:12px;padding:10px 12px;margin-bottom:8px;
+    font-size:13px;line-height:1.7;}
+  .review-item .zh{font-weight:800;color:var(--sky);font-size:14.5px;}
+  .review-item .ok{color:var(--bamboo-deep);font-weight:900;}
+  .review-item .ng{color:var(--wrong);font-weight:900;}
+
+  /* confetti */
+  .confetti{position:fixed;top:-12px;font-size:20px;animation:fall linear forwards;pointer-events:none;z-index:99;}
+  @keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.7;}}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+  footer{text-align:center;font-size:11px;color:#a5a59a;margin-top:16px;font-weight:700;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ========== START ========== -->
+  <section class="screen active" id="scrStart">
+    <div class="title-card">
+      <div class="big-panda" id="startPanda"></div>
+      <h1>復習クイズ<br>6/10 宿題チャレンジ！</h1>
+      <p>全10問・4択。連続正解でコンボボーナス🔥<br>🔊ボタンでネイティブ発音も聞けます。</p>
+      <div class="chips">
+        <span class="chip">越…越…</span><span class="chip">是…的</span>
+        <span class="chip">這道菜</span><span class="chip">都在</span>
+        <span class="chip">好久沒…</span>
+      </div>
+      <button class="start" id="btnStart">スタート！</button>
+    </div>
+  </section>
+
+  <!-- ========== QUIZ ========== -->
+  <section class="screen" id="scrQuiz">
+    <header>
+      <div class="brand">🐼 しゅうしゅう先生<small>復習クイズ 2026/6/10</small></div>
+      <div class="hud">
+        <div class="pill"><span class="lbl">SCORE</span><span class="val" id="score">0</span></div>
+        <div class="pill" id="comboPill"><span class="lbl">COMBO</span><span class="val" id="combo">0</span></div>
+      </div>
+    </header>
+    <div class="bamboo" id="bamboo"></div>
+    <div class="stage">
+      <div class="panda" id="panda"></div>
+      <div class="bubble" id="bubble">がんばって！</div>
+    </div>
+    <div class="card">
+      <span class="qtag" id="qtag">Q1 / 10</span>
+      <div class="qtext" id="qtext"></div>
+      <div class="opts" id="opts"></div>
+      <div class="explain" id="explain"></div>
+      <button class="next" id="btnNext">次の問題へ ▶</button>
+    </div>
+  </section>
+
+  <!-- ========== RESULT ========== -->
+  <section class="screen" id="scrEnd">
+    <div class="title-card">
+      <div class="big-panda" id="endPanda"></div>
+      <div class="rank" id="rank"></div>
+      <div class="score-big"><span id="finalScore">0</span><small> 点</small></div>
+      <p id="rankMsg"></p>
+      <button class="start" id="btnRetry">もう一回！</button>
+      <div class="review" id="reviewBox"></div>
+    </div>
+  </section>
+
+  <footer>しゅうしゅう先生 中国語レッスン ｜ 前回の宿題（越…越…／是…的／都在）より</footer>
+</div>
+
+<script>
+"use strict";
+/* ================= panda SVG ================= */
+function pandaSVG(mood){
+  // mood: normal / happy / sad / star
+  const mouth = {
+    normal:'<path d="M42 62 Q50 68 58 62" stroke="#2B2B2B" stroke-width="3" fill="none" stroke-linecap="round"/>',
+    happy:'<path d="M40 60 Q50 74 60 60" stroke="#2B2B2B" stroke-width="3.5" fill="#E8756B" stroke-linecap="round"/>',
+    sad:'<path d="M42 66 Q50 58 58 66" stroke="#2B2B2B" stroke-width="3" fill="none" stroke-linecap="round"/>',
+    star:'<path d="M38 58 Q50 76 62 58" stroke="#2B2B2B" stroke-width="3.5" fill="#E8756B" stroke-linecap="round"/>'
+  }[mood];
+  const eyes = mood==='happy'||mood==='star'
+    ? '<path d="M33 46 q5 -6 10 0" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M57 46 q5 -6 10 0" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round"/>'
+    : mood==='sad'
+    ? '<circle cx="38" cy="47" r="4" fill="#fff"/><circle cx="62" cy="47" r="4" fill="#fff"/><circle cx="63" cy="55" r="2.4" fill="#9DD1F1"/>'
+    : '<circle cx="38" cy="46" r="4.5" fill="#fff"/><circle cx="62" cy="46" r="4.5" fill="#fff"/><circle cx="39.5" cy="45" r="1.8" fill="#2B2B2B"/><circle cx="63.5" cy="45" r="1.8" fill="#2B2B2B"/>';
+  const extra = mood==='star' ? '<text x="8" y="24" font-size="16">✨</text><text x="76" y="20" font-size="16">✨</text>' : '';
+  return `<svg viewBox="0 0 100 100" width="100%" height="100%" role="img" aria-label="パンダ">
+    <circle cx="24" cy="20" r="13" fill="#2B2B2B"/><circle cx="76" cy="20" r="13" fill="#2B2B2B"/>
+    <circle cx="50" cy="52" r="36" fill="#fff" stroke="#2B2B2B" stroke-width="3"/>
+    <ellipse cx="37" cy="46" rx="9.5" ry="11" fill="#2B2B2B" transform="rotate(-12 37 46)"/>
+    <ellipse cx="63" cy="46" rx="9.5" ry="11" fill="#2B2B2B" transform="rotate(12 63 46)"/>
+    ${eyes}
+    <ellipse cx="50" cy="56" rx="5" ry="3.6" fill="#2B2B2B"/>
+    ${mouth}
+    <ellipse cx="26" cy="60" rx="5" ry="3.4" fill="#F6C6C0" opacity=".8"/>
+    <ellipse cx="74" cy="60" rx="5" ry="3.4" fill="#F6C6C0" opacity=".8"/>
+    ${extra}</svg>`;
+}
+
+/* ================= questions ================= */
+const QUESTIONS = [
+  {
+    tag:"越…越…",
+    q:'「<span class="jp">走れば走るほど疲れる</span>」中国語でどう言う？',
+    opts:["越跑越累。","跑越累越。","越累越跑。","跑得越累。"],
+    ans:0,
+    audio:"越跑越累。",
+    ex:"「越Ａ越Ｂ」＝「ＡすればするほどＢ」。宿題で✅完璧だった文です！"
+  },
+  {
+    tag:"越…越…",
+    q:'「<span class="jp">食べれば食べるほど太る</span>」は？',
+    opts:["越胖越吃。","越吃越胖。","吃越多越胖。","越吃胖。"],
+    ans:1,
+    audio:"越吃越胖。",
+    ex:"テキストの例文そのまま。「越吃越胖」— 動詞→結果の順番がポイント。"
+  },
+  {
+    tag:"越…越…",
+    q:'「<span class="jp">考えれば考えるほど難しい</span>」は？',
+    opts:["想越多越難。","越難越想。","越想越難。","想得越難。"],
+    ans:2,
+    audio:"越想越難。",
+    ex:"宿題で100点だった実用表現！そのまま覚えてOK。"
+  },
+  {
+    tag:"這道菜",
+    q:'「<span class="jp">この料理は私が作りました</span>」<br>会話で一番ネイティブらしいのは？',
+    opts:["這個料理是我做的。","這道菜是我做的。","這道料理是我做的。","這個菜我做了。"],
+    ans:1,
+    audio:"這道菜是我做的。",
+    ex:"「料理」は日本語寄りの言い方（中華料理などフォーマル用語向け）。会話では「菜」＋単位「道」が自然！"
+  },
+  {
+    tag:"量詞",
+    q:'料理（一皿）を数える単位はどれ？<br><span class="jp">一◯菜</span>',
+    opts:["個","顆","道","本"],
+    ans:2,
+    audio:"一道菜。",
+    ex:"「道」が料理の単位。「顆」は丸い果物など、「本」は本・雑誌に使います。"
+  },
+  {
+    tag:"是…的",
+    q:'「<span class="jp">このケーキはあなたが作ったのですか？</span>」<br>「是…的」を使った模範解答は？',
+    opts:["這個蛋糕你做了嗎？","這個蛋糕做的是你嗎？","你是做這個蛋糕嗎？","這個蛋糕（是）你做的嗎？"],
+    ans:3,
+    audio:"這個蛋糕是你做的嗎？",
+    ex:"「你做了嗎？」でも通じますが（△）、済んだことの「誰が・どこで」を聞くときは「是…的」が定番！"
+  },
+  {
+    tag:"是…的",
+    q:'「<span class="jp">この本は台湾で買いました</span>」は？',
+    opts:["這本書是在台灣買的。","這本書在台灣買了。","這本書買在台灣的。","是這本書在台灣買。"],
+    ans:0,
+    audio:"這本書是在台灣買的。",
+    ex:"テキストの例文。「是＋場所＋動詞＋的」で「〜で…したのです」。"
+  },
+  {
+    tag:"都在",
+    q:'一番「<span class="jp">継続感が強い</span>」（毎日ずっと取り組んでいる）のは？',
+    opts:["我每天學中文。","我每天都學中文。","我每天都在學中文。","我學中文每天。"],
+    ans:2,
+    audio:"最近，我每天都在學中文。",
+    ex:"都＝「例外なく」の強調、在＋動詞＝「今継続中」。合わせると「毎日ちゃんと続けてる」感が最強！"
+  },
+  {
+    tag:"都在",
+    q:'「<span class="jp">我都在</span>」——恋人に言うと、どんな意味？',
+    opts:["私は全部持ってるよ","私はずっと（そばに）いるよ","私は毎日忙しいよ","私はどこにでも行くよ"],
+    ans:1,
+    audio:"我都在。",
+    ex:"「私はずっといるよ！ずっと味方だよ」— 先生いわく最高なラブ言葉です♪"
+  },
+  {
+    tag:"好久沒…",
+    q:'「<span class="jp">久しぶりに食べたハンバーグ</span>」<br>ネイティブの言い方は？',
+    opts:["好久不見吃的漢堡排","很長時間的漢堡排","我好久沒吃的漢堡排","漢堡排好久了"],
+    ans:2,
+    audio:"我去吃了好久沒吃的漢堡排。",
+    ex:"「好久不見」は人に会うあいさつ専用！物事は「好久沒＋動詞」＝「長い間〜していない」。"
+  }
+];
+
+/* ================= state ================= */
+let idx=0, score=0, combo=0, maxCombo=0, results=[];
+const $=id=>document.getElementById(id);
+const scr={start:$("scrStart"),quiz:$("scrQuiz"),end:$("scrEnd")};
+
+/* ================= audio ================= */
+let voiceZh=null;
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  voiceZh = vs.find(v=>v.lang==="zh-TW") || vs.find(v=>/^zh/.test(v.lang)) || null;
+}
+if("speechSynthesis" in window){
+  pickVoice();
+  speechSynthesis.onvoiceschanged=pickVoice;
+}
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="zh-TW"; if(voiceZh) u.voice=voiceZh;
+  u.rate=0.85;
+  speechSynthesis.speak(u);
+}
+let actx=null;
+function beep(good){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const notes = good ? [[660,0],[880,.09],[1320,.18]] : [[220,0],[165,.12]];
+    notes.forEach(([f,t])=>{
+      const o=actx.createOscillator(), g=actx.createGain();
+      o.type="triangle"; o.frequency.value=f;
+      g.gain.setValueAtTime(.001,actx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(.18,actx.currentTime+t+.02);
+      g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+t+.18);
+      o.connect(g).connect(actx.destination);
+      o.start(actx.currentTime+t); o.stop(actx.currentTime+t+.2);
+    });
+  }catch(e){}
+}
+
+/* ================= UI helpers ================= */
+function setPanda(el,mood,cls){
+  el.innerHTML=pandaSVG(mood);
+  if(cls){el.classList.remove("jump","shake");void el.offsetWidth;el.classList.add(cls);}
+}
+function buildBamboo(){
+  const b=$("bamboo"); b.innerHTML="";
+  QUESTIONS.forEach((_,i)=>{
+    const s=document.createElement("div");
+    s.className="seg"+(i<idx?" done":i===idx?" now":"");
+    b.appendChild(s);
+  });
+}
+function confetti(){
+  const emo=["🎋","🐼","⭐","🎉","🌸"];
+  for(let i=0;i<24;i++){
+    const d=document.createElement("div");
+    d.className="confetti";
+    d.textContent=emo[i%emo.length];
+    d.style.left=Math.random()*100+"vw";
+    d.style.animationDuration=(1.6+Math.random()*1.4)+"s";
+    d.style.animationDelay=(Math.random()*.4)+"s";
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),3400);
+  }
+}
+const CHEER=["がんばって！","この調子〜♪","次いってみよう！","集中集中🐼","加油！加油！"];
+
+/* ================= flow ================= */
+function show(name){
+  Object.values(scr).forEach(s=>s.classList.remove("active"));
+  scr[name].classList.add("active");
+}
+function renderQ(){
+  const q=QUESTIONS[idx];
+  buildBamboo();
+  $("qtag").textContent=`Q${idx+1} / ${QUESTIONS.length}　【${q.tag}】`;
+  $("qtext").innerHTML=q.q;
+  $("bubble").textContent=CHEER[idx%CHEER.length];
+  setPanda($("panda"),"normal");
+  $("explain").className="explain"; $("explain").innerHTML="";
+  $("btnNext").className="next";
+  const box=$("opts"); box.innerHTML="";
+  q.opts.forEach((t,i)=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.textContent=t;
+    b.onclick=()=>answer(i,b);
+    box.appendChild(b);
+  });
+}
+function answer(i,btn){
+  const q=QUESTIONS[idx];
+  const buttons=[...$("opts").children];
+  buttons.forEach(b=>b.disabled=true);
+  const good = i===q.ans;
+  results.push({q,good,picked:q.opts[i]});
+  buttons[q.ans].classList.add("correct");
+  buttons[q.ans].insertAdjacentHTML("beforeend",'<span class="mark">✅</span>');
+  if(good){
+    combo++; maxCombo=Math.max(maxCombo,combo);
+    const bonus=Math.min(combo-1,3)*2;
+    score+=10+bonus;
+    beep(true);
+    setPanda($("panda"), combo>=3?"star":"happy","jump");
+    $("bubble").innerHTML = combo>=2
+      ? `正解！<b>${combo}連続コンボ 🔥</b> +${10+bonus}点`
+      : `正解！+10点 🎋`;
+    if(combo===3||combo===5||combo===7) confetti();
+  }else{
+    combo=0;
+    btn.classList.add("picked-wrong");
+    btn.insertAdjacentHTML("beforeend",'<span class="mark">❌</span>');
+    beep(false);
+    setPanda($("panda"),"sad","shake");
+    $("bubble").textContent="惜しい！解説を読んでみよう👇";
+  }
+  buttons.forEach((b,j)=>{if(j!==q.ans&&!b.classList.contains("picked-wrong"))b.classList.add("dim");});
+  $("score").textContent=score;
+  $("combo").textContent=combo;
+  const ex=$("explain");
+  ex.innerHTML=`<span class="zh">${q.audio}</span><br>${q.ex}<br>
+    <button class="speak" type="button">🔊 台湾華語で聞く</button>`;
+  ex.querySelector(".speak").onclick=()=>speak(q.audio);
+  ex.classList.add("show");
+  speak(q.audio);
+  $("btnNext").textContent = idx===QUESTIONS.length-1 ? "結果を見る 🏆" : "次の問題へ ▶";
+  $("btnNext").classList.add("show");
+}
+function finish(){
+  const total=QUESTIONS.length;
+  const good=results.filter(r=>r.good).length;
+  const pct=good/total;
+  let rank,msg,mood;
+  if(pct===1){rank="🏆 熊貓大師！";msg="全問正解！完璧なネイティブ感覚です♪";mood="star";}
+  else if(pct>=0.8){rank="🥇 熊貓師傅";msg="すばらしい！あと一歩で全問制覇！";mood="happy";}
+  else if(pct>=0.6){rank="🥈 熊貓見習い";msg="いい調子！間違えた問題を下でチェック👇";mood="happy";}
+  else{rank="🎋 竹の子級";msg="解説を読んで、もう一回チャレンジ！";mood="normal";}
+  $("rank").textContent=rank;
+  $("rankMsg").textContent=`${good} / ${total} 問正解　・　最大コンボ ${maxCombo}`;
+  $("finalScore").textContent=score;
+  setPanda($("endPanda"),mood);
+  if(pct>=0.8) confetti();
+  const box=$("reviewBox");
+  const miss=results.filter(r=>!r.good);
+  box.innerHTML = miss.length
+    ? "<h3>▼ 復習ポイント（間違えた問題）</h3>"+miss.map(r=>
+        `<div class="review-item"><span class="ng">❌ ${r.picked}</span><br>
+         <span class="ok">✅ </span><span class="zh">${r.q.audio}</span><br>${r.q.ex}</div>`).join("")
+    : "<h3>▼ パーフェクト！復習不要です 🐼✨</h3>";
+  show("end");
+}
+
+/* ================= events ================= */
+$("btnStart").onclick=()=>{ idx=0;score=0;combo=0;maxCombo=0;results=[];
+  $("score").textContent=0;$("combo").textContent=0; show("quiz"); renderQ(); };
+$("btnRetry").onclick=()=>$("btnStart").onclick();
+$("btnNext").onclick=()=>{ idx++; if(idx>=QUESTIONS.length) finish(); else renderQ(); };
+setPanda($("startPanda"),"happy");
+</script>
+</body>
+</html>
