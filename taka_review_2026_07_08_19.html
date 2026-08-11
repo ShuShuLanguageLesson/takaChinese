@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第19回 復習クイズ｜しゅうしゅう先生の台湾華語</title>
+<style>
+/* ============================================================
+   第19回 復習クイズ  —  design tokens
+   ink 1A1E2E / navy 2B3576 / coral E8556B / green 2E8B62
+   gold C98A1E / paper F5F6FB
+   ============================================================ */
+:root{
+  --ink:#1A1E2E;
+  --ink-2:#5B6178;
+  --ink-3:#8B92A8;
+  --navy:#2B3576;
+  --navy-d:#1E2559;
+  --coral:#E8556B;
+  --green:#2E8B62;
+  --gold:#C98A1E;
+  --paper:#F5F6FB;
+  --card:#FFFFFF;
+  --sky:#EDF1FB;
+  --peach:#FDF1E8;
+  --mint:#E9F5EF;
+  --line:#DFE3F0;
+  --r:14px;
+  --shadow:0 1px 2px rgba(27,32,60,.06), 0 8px 24px rgba(27,32,60,.06);
+  --jp:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Noto Sans JP","Meiryo",sans-serif;
+  --tc:"Noto Serif TC","Songti TC","Hiragino Mincho ProN","Yu Mincho","PMingLiU",serif;
+  --bpmf:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Hiragino Sans",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--jp);
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:64px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+/* ---------- header ---------- */
+.site{background:var(--navy);color:#fff;position:relative;overflow:hidden}
+.site .wrap{padding-top:28px;padding-bottom:26px;position:relative;z-index:2}
+.bpmf-strip{
+  position:absolute;inset:auto 0 -6px 0;z-index:1;
+  font-family:var(--bpmf);font-size:56px;letter-spacing:.22em;
+  color:#fff;opacity:.055;white-space:nowrap;user-select:none;pointer-events:none;
+}
+.eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:.18em;
+  color:#F2A0AE;margin:0 0 8px;
+}
+.site h1{
+  margin:0;font-size:29px;line-height:1.28;font-weight:800;letter-spacing:-.01em;
+}
+.site .lede{margin:10px 0 0;font-size:13.5px;color:#C3C9E8;max-width:34em}
+
+/* ---------- toolbar ---------- */
+.toolbar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 0;border-bottom:1px solid var(--line);
+}
+.crumb{font-size:13px;color:var(--ink-2);margin-right:auto}
+.crumb b{color:var(--ink)}
+.tgl{
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font-size:12.5px;color:var(--ink-2);
+  border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;
+}
+.tgl input{accent-color:var(--navy);margin:0}
+.linkbtn{
+  border:1px solid var(--line);background:#fff;border-radius:999px;
+  padding:5px 12px;font-size:12.5px;color:var(--ink-2);cursor:pointer;font-family:inherit;
+}
+.linkbtn:hover{border-color:var(--navy);color:var(--navy)}
+
+/* ---------- home ---------- */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0 14px}
+.part-card{
+  text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:18px 16px 16px;cursor:pointer;font-family:inherit;box-shadow:var(--shadow);
+  transition:transform .14s ease, border-color .14s ease;
+}
+.part-card:hover{transform:translateY(-2px);border-color:var(--navy)}
+.part-tag{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;
+  padding:2px 8px;border-radius:999px;margin-bottom:9px;
+}
+.tag-A{background:var(--peach);color:var(--coral)}
+.tag-B{background:var(--sky);color:var(--navy)}
+.tag-C{background:var(--mint);color:var(--green)}
+.tag-D{background:#FBF3E1;color:var(--gold)}
+.part-card h3{margin:0 0 4px;font-size:18px;font-weight:800}
+.part-card p{margin:0;font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.part-card .n{margin-top:10px;font-size:12px;color:var(--ink-3)}
+.cta{
+  display:block;width:100%;background:var(--navy);color:#fff;border:0;border-radius:var(--r);
+  padding:16px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;
+  box-shadow:var(--shadow);
+}
+.cta:hover{background:var(--navy-d)}
+.home-note{font-size:12.5px;color:var(--ink-3);margin:14px 0 0;text-align:center}
+
+/* ---------- progress ---------- */
+.progress{display:flex;gap:3px;margin:18px 0 6px}
+.progress span{height:4px;flex:1;background:var(--line);border-radius:2px}
+.progress span.done{background:var(--navy)}
+.progress span.miss{background:var(--coral)}
+.progress span.now{background:var(--ink-3)}
+.qmeta{font-size:12px;color:var(--ink-3);letter-spacing:.04em;margin-bottom:14px}
+
+/* ---------- question card ---------- */
+.qcard{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px 18px;box-shadow:var(--shadow);
+}
+.qlabel{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--coral);margin-bottom:8px}
+.qprompt{font-size:19px;font-weight:700;line-height:1.55;margin:0 0 4px}
+.qhint{font-size:12.5px;color:var(--ink-2);margin:6px 0 0}
+
+.opts{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+.opt{
+  display:flex;gap:11px;align-items:flex-start;width:100%;text-align:left;
+  background:#fff;border:1.5px solid var(--line);border-radius:11px;
+  padding:13px 14px;cursor:pointer;font-family:inherit;font-size:16px;line-height:1.5;
+  color:var(--ink);transition:border-color .12s ease, background .12s ease;
+}
+.opt:hover:not(:disabled){border-color:var(--navy);background:#FCFDFF}
+.opt:disabled{cursor:default}
+.opt .key{
+  flex:0 0 auto;width:22px;height:22px;border-radius:6px;background:var(--sky);
+  color:var(--navy);font-size:12px;font-weight:700;display:grid;place-items:center;
+  margin-top:2px;font-family:var(--jp);
+}
+.opt .txt{flex:1}
+.opt .o-tc{font-family:var(--tc);font-size:18.5px;letter-spacing:.02em}
+.opt .o-bpmf{font-family:var(--bpmf);font-size:17px;letter-spacing:.04em}
+.opt .o-jp{font-size:15.5px}
+.opt.correct{border-color:var(--green);background:var(--mint)}
+.opt.correct .key{background:var(--green);color:#fff}
+.opt.wrong{border-color:var(--coral);background:var(--peach)}
+.opt.wrong .key{background:var(--coral);color:#fff}
+.opt.dim{opacity:.5}
+
+/* ---------- order (語順) ---------- */
+.rail{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;padding:14px;
+  background:var(--sky);border-radius:12px;
+}
+.slot{
+  flex:1 1 auto;min-width:78px;min-height:62px;border-radius:9px;
+  border:1.5px dashed #B9C2E4;background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:4px 6px;cursor:pointer;font-family:inherit;
+}
+.slot .role{font-size:10px;color:var(--ink-3);letter-spacing:.06em;margin-bottom:2px}
+.slot .val{font-family:var(--tc);font-size:18px;color:var(--ink-3)}
+.slot.filled{border-style:solid;border-color:var(--navy);background:#fff}
+.slot.filled .val{color:var(--ink)}
+.slot.ok{border-color:var(--green);background:var(--mint)}
+.slot.ng{border-color:var(--coral);background:var(--peach)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tile{
+  border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;
+  font-family:var(--tc);font-size:19px;cursor:pointer;color:var(--ink);
+}
+.tile:hover:not(:disabled){border-color:var(--navy)}
+.tile.used{opacity:.28;cursor:default}
+.tile:disabled{cursor:default}
+
+/* ---------- feedback ---------- */
+.fb{margin-top:16px;border-radius:12px;padding:15px 16px;border:1px solid}
+.fb.ok{background:var(--mint);border-color:#BFE3D1}
+.fb.ng{background:var(--peach);border-color:#F7D5C4}
+.fb .verdict{font-size:14px;font-weight:800;margin:0 0 8px}
+.fb.ok .verdict{color:var(--green)}
+.fb.ng .verdict{color:var(--coral)}
+.fb .ans{font-family:var(--tc);font-size:21px;font-weight:600;line-height:1.5;margin:0}
+.fb .zh-ruby{
+  font-family:var(--bpmf);font-size:12px;color:var(--gold);
+  letter-spacing:.04em;margin:3px 0 0;line-height:1.5;
+}
+.fb .why{font-size:13.5px;color:var(--ink);margin:10px 0 0;line-height:1.75}
+.fb .why b{color:var(--navy)}
+body.no-zhuyin .zh-ruby{display:none}
+
+.rowbtns{display:flex;gap:10px;margin-top:16px}
+.btn{
+  flex:1;border:0;border-radius:11px;padding:14px;font-size:15px;font-weight:700;
+  font-family:inherit;cursor:pointer;
+}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy-d)}
+.btn-primary:disabled{background:#C3C8DE;cursor:default}
+.btn-ghost{background:#fff;color:var(--ink-2);border:1px solid var(--line);flex:0 0 auto;padding:14px 18px}
+.btn-ghost:hover{border-color:var(--navy);color:var(--navy)}
+
+/* ---------- result ---------- */
+.score{
+  background:var(--navy);color:#fff;border-radius:var(--r);padding:26px 22px;text-align:center;
+  margin-top:22px;position:relative;overflow:hidden;
+}
+.score .num{font-size:58px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.score .num small{font-size:20px;font-weight:600;color:#AFB7DF;margin-left:4px}
+.score .msg{margin:12px 0 0;font-size:14px;color:#D6DAF2}
+.bars{margin-top:18px;display:flex;flex-direction:column;gap:11px}
+.bar-row{display:flex;align-items:center;gap:11px;font-size:13px}
+.bar-row .nm{flex:0 0 74px;font-weight:700}
+.bar-track{flex:1;height:9px;background:var(--line);border-radius:5px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px}
+.bar-row .sc{flex:0 0 46px;text-align:right;color:var(--ink-2);font-size:12.5px}
+.missed{margin-top:22px}
+.missed h4{font-size:14px;margin:0 0 10px;color:var(--ink)}
+.missed-item{
+  background:#fff;border:1px solid var(--line);border-left:none;border-radius:11px;
+  padding:13px 15px;margin-bottom:9px;
+}
+.missed-item .q{font-size:12.5px;color:var(--ink-2);margin:0 0 5px}
+.missed-item .a{font-family:var(--tc);font-size:18px;margin:0;font-weight:600}
+.missed-item .r{font-size:12.5px;color:var(--ink-2);margin:6px 0 0;line-height:1.65}
+.allgood{
+  background:var(--mint);border:1px solid #BFE3D1;border-radius:12px;padding:16px;
+  font-size:14px;color:var(--green);font-weight:700;margin-top:22px;
+}
+footer{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);
+  font-size:12px;color:var(--ink-3);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* ---------- a11y / motion ---------- */
+:focus-visible{outline:2.5px solid var(--gold);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:560px){
+  .site h1{font-size:24px}
+  .home-grid{grid-template-columns:1fr}
+  .qprompt{font-size:17.5px}
+  .opt .o-tc{font-size:17px}
+  .fb .ans{font-size:19px}
+  .slot{min-width:66px}
+  .tile{font-size:17px;padding:8px 11px}
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="bpmf-strip">ㄅ ㄆ ㄇ ㄈ ㄉ ㄊ ㄋ ㄌ ㄍ ㄎ ㄏ ㄐ ㄑ ㄒ ㄓ ㄔ ㄕ ㄖ ㄗ ㄘ ㄙ</div>
+  <div class="wrap">
+    <p class="eyebrow">第19回 宿題 ｜ 復習クイズ</p>
+    <h1>間違いは「意味」ではなく<br>「置き場所」でした。</h1>
+    <p class="lede">宿題・単語・文法・表現の4パート、全34問。答えるとその場で理由が出ます。全部やっても15分ほどです。</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="crumb" id="crumb">スタート画面</div>
+    <label class="tgl"><input type="checkbox" id="zhuyinToggle" checked>注音を表示</label>
+    <button class="linkbtn" id="homeBtn" hidden>最初の画面へ</button>
+  </div>
+  <main id="app"></main>
+  <footer>
+    <span>しゅうしゅう@語学力を稼ぐ力に</span>
+    <span>台湾華語（繁体字・注音）／ 第19回 復習</span>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   問題データ
+   type: 'choice' = 選択式 / 'order' = 語順の組み立て
+   ============================================================ */
+const QUESTIONS = [
+
+/* ---------- PART A：宿題（10問） ---------- */
+{part:'A', type:'choice',
+ prompt:'昨日読んだ本は、面白かった。',
+ optLang:'tc',
+ opts:['我昨天讀書本的很有趣。','我昨天讀的書很有趣。','我昨天的讀書很有趣。'],
+ ans:'我昨天讀的書很有趣。',
+ ruby:'ㄨㄛˇ ㄗㄨㄛˊ ㄊㄧㄢ ㄉㄨˊ ˙ㄉㄜ ㄕㄨ ㄏㄣˇ ㄧㄡˇ ㄑㄩˋ',
+ why:'<b>「的」の後ろには必ず名詞が来ます。</b>「讀書」は 讀＋書 の離合詞なので、修飾に使うときは「讀」だけを取り出して〔我昨天讀的〕＋〔書〕。'},
+
+{part:'A', type:'choice',
+ prompt:'私はかつて服屋で働いていました。',
+ optLang:'tc',
+ opts:['我曾經服務衣服店。','我曾經上班服飾店過。','我曾經在服飾店上班過。'],
+ ans:'我曾經在服飾店上班過。',
+ ruby:'ㄨㄛˇ ㄘㄥˊ ㄐㄧㄥ ㄗㄞˋ ㄈㄨˊ ㄕˋ ㄉㄧㄢˋ ㄕㄤˋ ㄅㄢ ㄍㄨㄛˋ',
+ why:'<b>場所は「在＋場所」で動詞の前。</b>「上班」は 上＋班 の離合詞なので後ろに場所を置けません。「服務」は「（客に）サービスする」の意味です。'},
+
+{part:'A', type:'choice',
+ prompt:'私は今日、1時間半 勉強した。',
+ optLang:'tc',
+ opts:['我今天讀書了一小時半。','我今天讀了一小時半的書。'],
+ ans:'我今天讀了一小時半的書。',
+ ruby:'ㄨㄛˇ ㄐㄧㄣ ㄊㄧㄢ ㄉㄨˊ ˙ㄌㄜ ㄧˋ ㄒㄧㄠˇ ㄕˊ ㄅㄢˋ ˙ㄉㄜ ㄕㄨ',
+ why:'<b>動詞＋了＋時間量＋的＋目的語。</b>時間の長さは動詞のすぐ後ろ、目的語は最後です。'},
+
+{part:'A', type:'choice',
+ prompt:'昨日、1時間残業しました。',
+ optLang:'tc',
+ opts:['昨天加班了一個小時。','昨天了加班一個小時。','昨天一個小時加班了。'],
+ ans:'昨天加班了一個小時。',
+ ruby:'ㄗㄨㄛˊ ㄊㄧㄢ ㄐㄧㄚ ㄅㄢ ˙ㄌㄜ ㄧˊ ˙ㄍㄜ ㄒㄧㄠˇ ㄕˊ',
+ why:'<b>「了」は動詞の直後、時間量はその後ろ。</b>「加了一個小時的班」も正解です。'},
+
+{part:'A', type:'choice',
+ prompt:'残業が好きな人はいません。',
+ optLang:'tc',
+ opts:['加班喜歡的人都沒有。','都沒有人喜歡加班。'],
+ ans:'都沒有人喜歡加班。',
+ ruby:'ㄉㄡ ㄇㄟˊ ㄧㄡˇ ㄖㄣˊ ㄒㄧˇ ㄏㄨㄢ ㄐㄧㄚ ㄅㄢ',
+ why:'<b>日本語の順に並べないのがコツ。</b>「〜な人はいない」＝ 沒有人＋動詞句。都は「一人も」の強調です。'},
+
+{part:'A', type:'choice',
+ prompt:'連休は8月8日から始まって、8月16日までです。',
+ optLang:'tc',
+ opts:['連假開始從8月8號，到8月16號。','連假從開始8月8號，8月16號到。'],
+ ans:'連假開始從8月8號，到8月16號。',
+ ruby:'ㄌㄧㄢˊ ㄐㄧㄚˋ ㄎㄞ ㄕˇ ㄘㄨㄥˊ ⋯ ㄉㄠˋ ⋯',
+ why:'<b>「從〜到〜」はセットで使います。</b>「連假從8月8號開始，到8月16號結束。」も自然な言い方です。'},
+
+{part:'A', type:'choice',
+ prompt:'この椅子はどのくらい使っていますか？',
+ optLang:'tc',
+ opts:['這個椅子在多久用嗎？','這個椅子用多久了？'],
+ ans:'這個椅子用多久了？',
+ ruby:'ㄓㄜˋ ˙ㄍㄜ ㄧˇ ˙ㄗ ㄩㄥˋ ㄉㄨㄛ ㄐㄧㄡˇ ˙ㄌㄜ',
+ why:'<b>疑問詞（多久）がある文に「嗎」は使いません。</b>時間の長さは動詞の後ろ、文末の「了」で「今も続いている」を表します。答えは「六年了」。'},
+
+{part:'A', type:'choice',
+ prompt:'私はかつて台湾に住んでいたことがあります。（書くとき）',
+ optLang:'tc',
+ opts:['我曾經住台灣過。','我曾經住過台灣。'],
+ ans:'我曾經住過台灣。',
+ ruby:'ㄨㄛˇ ㄘㄥˊ ㄐㄧㄥ ㄓㄨˋ ㄍㄨㄛˋ ㄊㄞˊ ㄨㄢ',
+ why:'<b>「過」は動詞の直後、目的語の前。</b>会話では「住台灣過」と言う人もいますが、書くときは 住過台灣 にしましょう。'},
+
+{part:'A', type:'choice',
+ prompt:'8月8日から16日まで、家で過ごしたいです。',
+ optLang:'tc',
+ opts:['我想在房子裡面。','我想待在家裡。'],
+ ans:'我想待在家裡。',
+ ruby:'ㄨㄛˇ ㄒㄧㄤˇ ㄉㄞ ㄗㄞˋ ㄐㄧㄚ ㄌㄧˇ',
+ why:'<b>房子＝建物としての家。</b>自分の家は「家／家裡」。「待在家裡」で「家でのんびり過ごす」というニュアンスになります。'},
+
+{part:'A', type:'choice',
+ prompt:'ブログを書いているので、毎日1時間くらい残業しています。',
+ optLang:'tc',
+ opts:['每天加班了一個小時左右。因為寫部落格。','因為寫部落格，每天加班了一個小時左右。'],
+ ans:'因為寫部落格，每天加班了一個小時左右。',
+ ruby:'ㄧㄣ ㄨㄟˋ ㄒㄧㄝˇ ㄅㄨˋ ㄌㄨㄛˋ ㄍㄜˊ，ㄇㄟˇ ㄊㄧㄢ ㄐㄧㄚ ㄅㄢ ˙ㄌㄜ ㄧˊ ˙ㄍㄜ ㄒㄧㄠˇ ㄕˊ ㄗㄨㄛˇ ㄧㄡˋ',
+ why:'<b>中国語は「因為A，（所以）B」。理由が先、結果が後です。</b>日本語のように理由を後ろに置くと不自然になります。'},
+
+/* ---------- PART B：単語（10問） ---------- */
+{part:'B', type:'choice', zh:'上班', ruby:'ㄕㄤˋ ㄅㄢ',
+ prompt:'「上班」の意味は？',
+ opts:['働く・出勤する','残業する','会議をする'],
+ ans:'働く・出勤する',
+ why:'どこで働くかを言うときは <b>在＋場所＋上班</b>。例：我在服飾店上班。'},
+
+{part:'B', type:'choice', zh:'加班', ruby:'ㄐㄧㄚ ㄅㄢ',
+ prompt:'「加班」の意味は？',
+ opts:['残業する','出勤する','早退する'],
+ ans:'残業する',
+ why:'例：昨天加班了一個小時。／ 都沒有人喜歡加班。'},
+
+{part:'B', type:'choice', zh:'服飾店', ruby:'ㄈㄨˊ ㄕˋ ㄉㄧㄢˋ',
+ prompt:'「服飾店」の意味は？',
+ opts:['服屋・アパレル店','食料品店','文房具店'],
+ ans:'服屋・アパレル店',
+ why:'「服裝店」も同じ意味。業界を指すときは <b>服飾業</b> と言います。'},
+
+{part:'B', type:'choice', zh:'擠在一起', ruby:'ㄐㄧˇ ㄗㄞˋ ㄧˋ ㄑㄧˇ',
+ prompt:'「擠在一起」の意味は？',
+ opts:['（予定が）重なる','並んで順番を待つ','一緒に住む'],
+ ans:'（予定が）重なる',
+ why:'忙しさの説明で大活躍します。例：<b>最近事情都擠在一起。</b>（最近やることが重なっていて…）'},
+
+{part:'B', type:'choice', zh:'忙不過來', ruby:'ㄇㄤˊ ㄅㄨˊ ㄍㄨㄛˋ ㄌㄞˊ',
+ prompt:'「忙不過來」の意味は？',
+ opts:['手が回らない','忙しくない','急いで通り過ぎる'],
+ ans:'手が回らない',
+ why:'例：事情太多，我快忙不過來了。（やることが多すぎて、手が回らなくなりそうです）'},
+
+{part:'B', type:'choice', zh:'剪影片', ruby:'ㄐㄧㄢˇ ㄧㄥˇ ㄆㄧㄢˋ',
+ prompt:'「剪影片」の意味は？',
+ opts:['動画を編集する','写真を撮る','映画を見る'],
+ ans:'動画を編集する',
+ why:'「剪」はハサミで切る＝カット編集のイメージ。短く「剪片」とも言います。'},
+
+{part:'B', type:'choice', zh:'社群貼文', ruby:'ㄕㄜˋ ㄑㄩㄣˊ ㄊㄧㄝ ㄨㄣˊ',
+ prompt:'「社群貼文」の意味は？',
+ opts:['SNS投稿','会社の掲示板','名刺'],
+ ans:'SNS投稿',
+ why:'動詞をつけて <b>發社群貼文</b>（SNSに投稿する）の形でよく使います。'},
+
+{part:'B', type:'choice', zh:'多久', ruby:'ㄉㄨㄛ ㄐㄧㄡˇ',
+ prompt:'「多久」が聞いているのは？',
+ opts:['どのくらいの期間','どのくらいの値段','いくつ（個数）'],
+ ans:'どのくらいの期間',
+ why:'値段は 多少錢、個数は 幾個。期間は <b>動詞＋多久</b> の形で。例：用多久了？'},
+
+{part:'B', type:'choice', zh:'然後', ruby:'ㄖㄢˊ ㄏㄡˋ',
+ prompt:'「然後」の意味は？',
+ opts:['そして・それから','しかし','だから'],
+ ans:'そして・それから',
+ why:'<b>次の文の頭に置く接続詞</b>です。文の最後には置けません。「だから」は 所以、「しかし」は 可是／但是。'},
+
+{part:'B', type:'choice',
+ prompt:'「曾經（かつて〜した）」の注音はどれ？',
+ optLang:'bpmf',
+ opts:['ㄘㄥˊ ㄐㄧㄥ','ㄗㄥ ㄐㄧㄥˋ','ㄔㄥˊ ㄐㄧㄥ'],
+ ans:'ㄘㄥˊ ㄐㄧㄥ',
+ why:'céng jīng。動詞の前に置いて「かつて〜した」。文末の「過」とセットで使うと自然です。'},
+
+/* ---------- PART C：文法（8問） ---------- */
+{part:'C', type:'choice',
+ prompt:'「過」を置く場所は？',
+ opts:['動詞の直後・目的語の前','文の一番最後','動詞の前'],
+ ans:'動詞の直後・目的語の前',
+ why:'<b>動詞＋過＋目的語。</b>住過台灣／去過日本／吃過臭豆腐／學過中文。'},
+
+{part:'C', type:'choice',
+ prompt:'疑問詞（多久・哪裡・什麼など）がある文で「嗎」は？',
+ opts:['使わない','必ず使う','文の頭に置く'],
+ ans:'使わない',
+ why:'✕ 你去哪裡嗎？　⭕ 你去哪裡？　✕ 用多久嗎？　⭕ <b>用多久了？</b>'},
+
+{part:'C', type:'choice',
+ prompt:'「這個椅子用多久＿？」の＿に入るのは？',
+ optLang:'tc',
+ opts:['了','嗎','的'],
+ ans:'了',
+ why:'<b>文末の「了」＝今も続いている。</b>「今まで使い続けてどのくらい？」の意味になり、答えも「六年了」と受けます。'},
+
+{part:'C', type:'choice',
+ prompt:'離合詞（動詞＋目的語がくっついた語）はどれ？',
+ optLang:'tc',
+ opts:['開會','喜歡','知道'],
+ ans:'開會',
+ why:'開＋會 に割れます。だから「3回会議した」は <b>開了三次會</b>。讀書・加班・上班・見面・幫忙 も同じ仲間です。'},
+
+{part:'C', type:'choice',
+ prompt:'「我＿服飾店上班。」の＿に入るのは？',
+ optLang:'tc',
+ opts:['在','從','到'],
+ ans:'在',
+ why:'<b>場所は「在＋場所」で動詞の前。</b>離合詞「上班」の後ろに場所は置けません。'},
+
+{part:'C', type:'choice',
+ prompt:'「我看＿兩個小時＿電視。」に入る順番は？',
+ optLang:'tc',
+ opts:['了 → 的','的 → 了','過 → 了'],
+ ans:'了 → 的',
+ why:'<b>動詞＋了＋時間量＋的＋目的語。</b>我看了兩個小時的電視。（2時間テレビを見た）'},
+
+{part:'C', type:'choice',
+ prompt:'「的」の後ろに来るのは？',
+ opts:['名詞','動詞','形容詞'],
+ ans:'名詞',
+ why:'書き終えたら「的の後ろに名詞があるか」を必ず確認。<b>なければ、その文はまだ完成していません。</b>'},
+
+{part:'C', type:'choice',
+ prompt:'時間の長さ（1時間・6年など）を置く場所は？',
+ opts:['動詞の後ろ','動詞の前','主語の前'],
+ ans:'動詞の後ろ',
+ why:'加班了一個小時／用多久了／讀了一小時半的書。<b>「在」は場所と進行を表す語なので、期間には使いません。</b>'},
+
+/* ---------- PART D：表現（6問・語順） ---------- */
+{part:'D', type:'order',
+ prompt:'残業が好きな人はいません。',
+ slots:['強調','主語','動詞','目的語'],
+ seq:['都','沒有人','喜歡','加班'],
+ ruby:'ㄉㄡ ㄇㄟˊ ㄧㄡˇ ㄖㄣˊ ㄒㄧˇ ㄏㄨㄢ ㄐㄧㄚ ㄅㄢ',
+ why:'英語の Nobody likes working overtime. と同じ並びです。'},
+
+{part:'D', type:'order',
+ prompt:'私は1時間半、本を読みました。',
+ slots:['主語','動詞','了','時間量','的','目的語'],
+ seq:['我','讀','了','一小時半','的','書'],
+ ruby:'ㄨㄛˇ ㄉㄨˊ ˙ㄌㄜ ㄧˋ ㄒㄧㄠˇ ㄕˊ ㄅㄢˋ ˙ㄉㄜ ㄕㄨ',
+ why:'離合詞「讀書」を割って、間に時間量を入れるのがポイントです。'},
+
+{part:'D', type:'order',
+ prompt:'私はかつて服飾店で働いていました。',
+ slots:['主語','かつて','場所','動詞','過'],
+ seq:['我','曾經','在服飾店','上班','過'],
+ ruby:'ㄨㄛˇ ㄘㄥˊ ㄐㄧㄥ ㄗㄞˋ ㄈㄨˊ ㄕˋ ㄉㄧㄢˋ ㄕㄤˋ ㄅㄢ ㄍㄨㄛˋ',
+ why:'曾經は動詞の前、場所は動詞の前、過は動詞の直後。位置が3つとも決まっています。'},
+
+{part:'D', type:'order',
+ prompt:'この椅子はどのくらい使っていますか？',
+ slots:['主語','動詞','時間量','了'],
+ seq:['這個椅子','用','多久','了'],
+ ruby:'ㄓㄜˋ ˙ㄍㄜ ㄧˇ ˙ㄗ ㄩㄥˋ ㄉㄨㄛ ㄐㄧㄡˇ ˙ㄌㄜ',
+ why:'疑問詞があるので「嗎」は不要。文末の「了」が「今も続いている」を表します。'},
+
+{part:'D', type:'order',
+ prompt:'ブログを書いているので、毎日1時間くらい残業しています。',
+ slots:['理由','時間','動詞','了','時間量'],
+ seq:['因為寫部落格','每天','加班','了','一個小時左右'],
+ ruby:'ㄧㄣ ㄨㄟˋ ㄒㄧㄝˇ ㄅㄨˋ ㄌㄨㄛˋ ㄍㄜˊ，ㄇㄟˇ ㄊㄧㄢ ㄐㄧㄚ ㄅㄢ ˙ㄌㄜ ㄧˊ ˙ㄍㄜ ㄒㄧㄠˇ ㄕˊ ㄗㄨㄛˇ ㄧㄡˋ',
+ why:'理由の「因為」を先頭に。日本語と語順が入れかわる代表例です。'},
+
+{part:'D', type:'order',
+ prompt:'やることが重なっているので、毎日残業しています。',
+ slots:['因為','理由','所以','結果'],
+ seq:['因為','事情都擠在一起','所以','每天都加班'],
+ ruby:'ㄧㄣ ㄨㄟˋ ㄕˋ ˙ㄑㄧㄥ ㄉㄡ ㄐㄧˇ ㄗㄞˋ ㄧˋ ㄑㄧˇ，ㄙㄨㄛˇ ㄧˇ ㄇㄟˇ ㄊㄧㄢ ㄉㄡ ㄐㄧㄚ ㄅㄢ',
+ why:'「因為A，所以B」は最初から最後までセットで覚えると、話すときに迷いません。'},
+];
+
+const PARTS = {
+  A:{name:'宿題', sub:'第19回の10文を、正しい形に直します。', color:'var(--coral)', tag:'PART A'},
+  B:{name:'単語', sub:'今回の16語から、よく使う10語。', color:'var(--navy)', tag:'PART B'},
+  C:{name:'文法', sub:'曾經・過・了・時間量の置き場所。', color:'var(--green)', tag:'PART C'},
+  D:{name:'表現', sub:'タップして語順を組み立てます。', color:'var(--gold)', tag:'PART D'},
+};
+const PART_ORDER = ['A','B','C','D'];
+
+/* ============================================================
+   状態
+   ============================================================ */
+const app   = document.getElementById('app');
+const crumb = document.getElementById('crumb');
+const homeBtn = document.getElementById('homeBtn');
+let queue = [], idx = 0, results = [], answered = false, picked = null, slotState = [];
+
+const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.getElementById('zhuyinToggle').addEventListener('change', e => {
+  document.body.classList.toggle('no-zhuyin', !e.target.checked);
+});
+homeBtn.addEventListener('click', renderHome);
+
+/* ============================================================
+   ホーム
+   ============================================================ */
+function renderHome(){
+  queue = []; results = []; idx = 0;
+  crumb.textContent = 'スタート画面';
+  homeBtn.hidden = true;
+  const counts = {};
+  PART_ORDER.forEach(p => counts[p] = QUESTIONS.filter(q => q.part === p).length);
+
+  app.innerHTML = `
+    <div class="home-grid">
+      ${PART_ORDER.map(p => `
+        <button class="part-card" data-part="${p}">
+          <span class="part-tag tag-${p}">${PARTS[p].tag}</span>
+          <h3>${PARTS[p].name}</h3>
+          <p>${PARTS[p].sub}</p>
+          <div class="n">${counts[p]}問</div>
+        </button>`).join('')}
+    </div>
+    <button class="cta" id="allBtn">4パート通しで挑戦する（全${QUESTIONS.length}問）</button>
+    <p class="home-note">選択肢は 1〜4 のキーでも選べます。答えたあとは Enter で次へ。</p>
+  `;
+  app.querySelectorAll('.part-card').forEach(b =>
+    b.addEventListener('click', () => start(QUESTIONS.filter(q => q.part === b.dataset.part))));
+  document.getElementById('allBtn').addEventListener('click', () => start(QUESTIONS));
+}
+
+function start(list){
+  queue = list.slice();
+  queue.forEach(q => { delete q._opts; delete q._tiles; });
+  idx = 0; results = [];
+  homeBtn.hidden = false;
+  renderQuestion();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+/* ============================================================
+   出題
+   ============================================================ */
+function renderQuestion(){
+  const q = queue[idx];
+  answered = false; picked = null;
+  crumb.innerHTML = `<b>${PARTS[q.part].name}</b>　${idx+1} / ${queue.length}`;
+
+  const bar = queue.map((_, i) => {
+    if(i < results.length) return `<span class="${results[i].ok ? 'done' : 'miss'}"></span>`;
+    if(i === idx) return '<span class="now"></span>';
+    return '<span></span>';
+  }).join('');
+
+  let body;
+  if(q.type === 'order'){
+    q._tiles = q._tiles || shuffle(q.seq);
+    slotState = new Array(q.seq.length).fill(null);
+    body = `
+      <p class="qhint">タップして、下の枠に並べていきましょう。もう一度タップすると外れます。</p>
+      <div class="rail" id="rail">
+        ${q.slots.map((r,i) => `
+          <button class="slot" data-slot="${i}">
+            <span class="role">${esc(r)}</span>
+            <span class="val">＿</span>
+          </button>`).join('')}
+      </div>
+      <div class="tiles" id="tiles">
+        ${q._tiles.map((t,i) => `<button class="tile" data-tile="${i}">${esc(t)}</button>`).join('')}
+      </div>
+      <div class="rowbtns">
+        <button class="btn btn-primary" id="checkBtn" disabled>答え合わせ</button>
+      </div>`;
+  } else {
+    q._opts = q._opts || shuffle(q.opts);
+    const cls = 'o-' + (q.optLang || 'jp');
+    body = `
+      <div class="opts" id="opts">
+        ${q._opts.map((o,i) => `
+          <button class="opt" data-i="${i}">
+            <span class="key">${i+1}</span>
+            <span class="txt ${cls}">${esc(o)}</span>
+          </button>`).join('')}
+      </div>`;
+  }
+
+  const head = q.zh
+    ? `<p class="qprompt"><span style="font-family:var(--tc)">${esc(q.zh)}</span></p>
+       <p class="zh-ruby" style="font-family:var(--bpmf);font-size:12px;color:var(--gold);margin:0 0 10px">${esc(q.ruby||'')}</p>
+       <p class="qhint" style="margin-top:0">${esc(q.prompt)}</p>`
+    : `<p class="qprompt">${esc(q.prompt)}</p>`;
+
+  app.innerHTML = `
+    <div class="progress">${bar}</div>
+    <div class="qmeta">${PARTS[q.part].tag} ・ ${PARTS[q.part].name}</div>
+    <div class="qcard">
+      <div class="qlabel">${q.type === 'order' ? '語順を組み立てる' : '正しいのはどれ？'}</div>
+      ${head}
+      ${body}
+      <div id="fbSlot"></div>
+    </div>`;
+
+  if(q.type === 'order') bindOrder(q); else bindChoice(q);
+}
+
+/* ---------- 選択式 ---------- */
+function bindChoice(q){
+  app.querySelectorAll('.opt').forEach(btn =>
+    btn.addEventListener('click', () => judgeChoice(q, +btn.dataset.i)));
+}
+
+function judgeChoice(q, i){
+  if(answered) return;
+  answered = true;
+  picked = q._opts[i];
+  const ok = picked === q.ans;
+  results.push({q, ok, given:picked});
+
+  app.querySelectorAll('.opt').forEach((b, j) => {
+    b.disabled = true;
+    const v = q._opts[j];
+    if(v === q.ans) b.classList.add('correct');
+    else if(j === i) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+  showFeedback(q, ok);
+}
+
+/* ---------- 語順 ---------- */
+function bindOrder(q){
+  const rail = document.getElementById('rail');
+  const tiles = document.getElementById('tiles');
+  const checkBtn = document.getElementById('checkBtn');
+
+  function paint(){
+    rail.querySelectorAll('.slot').forEach((s, i) => {
+      const v = slotState[i];
+      s.querySelector('.val').textContent = v === null ? '＿' : q._tiles[v];
+      s.classList.toggle('filled', v !== null);
+    });
+    tiles.querySelectorAll('.tile').forEach((t, i) => {
+      t.classList.toggle('used', slotState.includes(i));
+    });
+    checkBtn.disabled = slotState.includes(null);
+  }
+
+  tiles.querySelectorAll('.tile').forEach(t => t.addEventListener('click', () => {
+    if(answered) return;
+    const i = +t.dataset.tile;
+    if(slotState.includes(i)) return;
+    const empty = slotState.indexOf(null);
+    if(empty === -1) return;
+    slotState[empty] = i;
+    paint();
+  }));
+
+  rail.querySelectorAll('.slot').forEach(s => s.addEventListener('click', () => {
+    if(answered) return;
+    const i = +s.dataset.slot;
+    if(slotState[i] === null) return;
+    slotState[i] = null;
+    paint();
+  }));
+
+  checkBtn.addEventListener('click', () => {
+    if(answered || slotState.includes(null)) return;
+    answered = true;
+    const given = slotState.map(i => q._tiles[i]);
+    const ok = given.join('') === q.seq.join('');
+    results.push({q, ok, given: given.join('')});
+
+    rail.querySelectorAll('.slot').forEach((s, i) => {
+      s.classList.add(given[i] === q.seq[i] ? 'ok' : 'ng');
+      if(!ok) s.querySelector('.val').textContent = q.seq[i];
+    });
+    tiles.querySelectorAll('.tile').forEach(t => t.disabled = true);
+    checkBtn.remove();
+    showFeedback(q, ok);
+  });
+
+  paint();
+}
+
+/* ---------- 解説 ---------- */
+function showFeedback(q, ok){
+  const answer = q.type === 'order' ? q.seq.join('') : q.ans;
+  const last = idx === queue.length - 1;
+  document.getElementById('fbSlot').innerHTML = `
+    <div class="fb ${ok ? 'ok' : 'ng'}">
+      <p class="verdict">${ok ? '正解です' : 'ここを直しましょう'}</p>
+      <p class="ans">${esc(answer)}</p>
+      ${(q.ruby && !q.zh) ? `<p class="zh-ruby">${esc(q.ruby)}</p>` : ''}
+      <p class="why">${q.why}</p>
+    </div>
+    <div class="rowbtns">
+      <button class="btn btn-primary" id="nextBtn">${last ? '結果を見る' : '次の問題へ'}</button>
+    </div>`;
+  const nb = document.getElementById('nextBtn');
+  nb.addEventListener('click', next);
+  nb.focus({preventScroll:true});
+}
+
+function next(){
+  if(idx === queue.length - 1){ renderResult(); }
+  else { idx++; renderQuestion(); }
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+/* ============================================================
+   結果
+   ============================================================ */
+function renderResult(){
+  const total = results.length;
+  const hit = results.filter(r => r.ok).length;
+  const pct = Math.round(hit / total * 100);
+  crumb.textContent = '結果';
+
+  let msg;
+  if(pct === 100) msg = '全問正解。もう「置き場所」が身についています。';
+  else if(pct >= 80) msg = 'かなり定着しています。落とした問題だけ、もう一度どうぞ。';
+  else if(pct >= 50) msg = '意味は分かっています。あとは位置のルールを覚えるだけです。';
+  else msg = '焦らなくて大丈夫。まず「的の後ろは名詞」と「時間量は動詞の後ろ」の2つから。';
+
+  const byPart = PART_ORDER.map(p => {
+    const rs = results.filter(r => r.q.part === p);
+    return {p, n: rs.length, hit: rs.filter(r => r.ok).length};
+  }).filter(x => x.n > 0);
+
+  const missed = results.filter(r => !r.ok);
+
+  app.innerHTML = `
+    <div class="score">
+      <div class="num">${hit}<small>/ ${total}</small></div>
+      <p class="msg">${esc(msg)}</p>
+    </div>
+
+    <div class="bars">
+      ${byPart.map(x => {
+        const w = Math.round(x.hit / x.n * 100);
+        return `<div class="bar-row">
+          <span class="nm">${PARTS[x.p].name}</span>
+          <span class="bar-track"><span class="bar-fill" style="width:${w}%;background:${PARTS[x.p].color}"></span></span>
+          <span class="sc">${x.hit}/${x.n}</span>
+        </div>`;
+      }).join('')}
+    </div>
+
+    ${missed.length ? `
+      <div class="missed">
+        <h4>もう一度おさえる ${missed.length}問</h4>
+        ${missed.map(r => `
+          <div class="missed-item" style="border-left:4px solid ${PARTS[r.q.part].color}">
+            <p class="q">${esc(r.q.zh ? r.q.zh + '　' + r.q.prompt : r.q.prompt)}</p>
+            <p class="a">${esc(r.q.type === 'order' ? r.q.seq.join('') : r.q.ans)}</p>
+            <p class="r">${r.q.why}</p>
+          </div>`).join('')}
+      </div>` : `<div class="allgood">間違いはありませんでした。次回の会話タイムでそのまま使えます。</div>`}
+
+    <div class="rowbtns" style="margin-top:22px">
+      ${missed.length ? `<button class="btn btn-primary" id="againWrong">間違えた${missed.length}問だけやり直す</button>` : ''}
+      <button class="btn ${missed.length ? 'btn-ghost' : 'btn-primary'}" id="againAll">同じ問題をもう一度</button>
+      <button class="btn btn-ghost" id="toHome">最初の画面へ</button>
+    </div>
+  `;
+
+  const wrongQs = missed.map(r => r.q);
+  const same = queue.slice();
+  const ab = document.getElementById('againWrong');
+  if(ab) ab.addEventListener('click', () => start(wrongQs));
+  document.getElementById('againAll').addEventListener('click', () => start(same));
+  document.getElementById('toHome').addEventListener('click', renderHome);
+}
+
+/* ============================================================
+   キーボード
+   ============================================================ */
+document.addEventListener('keydown', e => {
+  if(e.target.tagName === 'INPUT') return;
+  const nb = document.getElementById('nextBtn');
+  if(nb && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); nb.click(); return; }
+  if(answered) return;
+  const n = parseInt(e.key, 10);
+  if(n >= 1 && n <= 4){
+    const b = app.querySelector(`.opt[data-i="${n-1}"]`);
+    if(b) b.click();
+  }
+});
+
+renderHome();
+</script>
+</body>
+</html>
