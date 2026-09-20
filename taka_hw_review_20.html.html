@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>復習クイズ ｜ 量詞と語順 ｜ しゅうしゅう先生</title>
+<style>
+:root{
+  --ink:#0F2440;
+  --ink-soft:#1B3A63;
+  --paper:#FCFAF6;
+  --paper-line:#C8503C;
+  --shu:#C0392B;
+  --shu-soft:rgba(200,80,60,.30);
+  --green:#1B7A55;
+  --gold:#B07D19;
+  --mute:#8A93A6;
+  --mute-2:#5A6478;
+  --line:#E3E8F0;
+  --jp:"Hiragino Kaku Gothic ProN","Yu Gothic Medium","Yu Gothic","Meiryo","Noto Sans JP",system-ui,sans-serif;
+  --zh:"Noto Serif TC","Songti TC","Source Han Serif TC","PMingLiU","MS Mincho","Yu Mincho",serif;
+  --cell:clamp(30px,8.6vw,42px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--jp);
+  background:var(--ink);
+  color:#E8EDF5;
+  min-height:100vh;
+  line-height:1.7;
+  padding:0 0 4rem;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+button:focus-visible,[tabindex]:focus-visible{outline:2px solid #7FB3F0;outline-offset:2px;border-radius:4px}
+
+.wrap{max-width:760px;margin:0 auto;padding:0 1rem}
+
+/* ---------- header ---------- */
+header{padding:1.6rem 0 1.1rem}
+.eyebrow{font-size:.68rem;letter-spacing:.22em;color:#7E97BC;font-weight:700}
+h1{font-size:1.45rem;font-weight:800;letter-spacing:.02em;margin-top:.35rem}
+.sub{font-size:.8rem;color:#93A9C8;margin-top:.3rem}
+
+.bar{height:3px;background:rgba(255,255,255,.12);border-radius:3px;margin-top:1rem;overflow:hidden}
+.bar > i{display:block;height:100%;width:0;background:var(--shu);transition:width .35s ease}
+.meta{display:flex;justify-content:space-between;font-size:.72rem;color:#93A9C8;margin-top:.45rem}
+
+/* ---------- screens ---------- */
+.screen{display:none}
+.screen.on{display:block}
+
+/* ---------- start ---------- */
+.lead{font-size:.92rem;color:#C3D2E6;margin:.2rem 0 1.4rem}
+.modes{display:grid;gap:.6rem}
+.mode{
+  display:flex;align-items:center;gap:.9rem;width:100%;text-align:left;
+  background:#16304F;border:1px solid #26456E;border-radius:10px;padding:.85rem 1rem;
+  transition:border-color .18s,transform .18s;
+}
+.mode:hover{border-color:#4A7AB5;transform:translateX(2px)}
+.mode .n{font-family:var(--zh);font-size:1.5rem;color:var(--shu);line-height:1;min-width:1.6rem;text-align:center}
+.mode .t{font-weight:700;font-size:.95rem}
+.mode .d{font-size:.75rem;color:#93A9C8;margin-top:.1rem}
+.mode .c{margin-left:auto;font-size:.72rem;color:#7E97BC;white-space:nowrap}
+
+/* ---------- question card ---------- */
+.card{background:#16304F;border-radius:12px;padding:1.15rem 1.1rem 1.3rem;border:1px solid #26456E}
+.tag{display:inline-block;font-size:.66rem;letter-spacing:.14em;font-weight:700;padding:.2rem .55rem;border-radius:99px;background:rgba(200,80,60,.18);color:#F0A08E}
+.q{font-size:1.02rem;font-weight:700;margin-top:.7rem;line-height:1.6}
+.q-jp{font-size:.82rem;color:#A9BDD8;margin-top:.35rem}
+.instr{font-size:.74rem;color:#8FA6C4;margin-top:.75rem}
+
+/* ---------- 稿紙 grid ---------- */
+.sheet{
+  background:var(--paper);border-radius:6px;padding:.55rem;margin-top:.85rem;
+  display:grid;grid-template-columns:repeat(auto-fill,var(--cell));
+  justify-content:center;
+}
+.cell{
+  width:var(--cell);height:var(--cell);
+  border:1px solid var(--shu-soft);
+  margin:-.5px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--zh);font-size:calc(var(--cell) * .62);
+  color:var(--ink);line-height:1;
+  position:relative;
+}
+.cell.tap{cursor:pointer}
+.cell.tap:hover{background:rgba(200,80,60,.07)}
+.cell.hit{background:rgba(200,80,60,.16)}
+.cell.hit::after{
+  content:"";position:absolute;left:8%;right:8%;bottom:14%;
+  height:2px;background:var(--shu);
+}
+.cell.ok{color:var(--green)}
+.cell.pend{color:rgba(15,36,64,.18)}
+
+/* ---------- choices ---------- */
+.opts{display:grid;gap:.5rem;margin-top:.95rem}
+.opt{
+  display:flex;align-items:center;gap:.75rem;width:100%;text-align:left;
+  background:#FCFAF6;color:var(--ink);border:1px solid #DCD5CA;border-radius:8px;
+  padding:.7rem .85rem;transition:border-color .15s,background .15s;
+}
+.opt:hover:not(:disabled){border-color:var(--shu);background:#fff}
+.opt:disabled{cursor:default}
+.opt .k{
+  font-family:var(--zh);font-size:.85rem;font-weight:700;color:var(--shu);
+  border:1px solid var(--shu-soft);border-radius:4px;
+  min-width:1.55rem;height:1.55rem;display:flex;align-items:center;justify-content:center;flex:none
+}
+.opt .v{font-family:var(--zh);font-size:1.08rem;line-height:1.45}
+.opt .v.ja{font-family:var(--jp);font-size:.95rem}
+.opt.correct{border-color:var(--green);background:#EDF7F2}
+.opt.correct .k{color:var(--green);border-color:var(--green)}
+.opt.wrong{border-color:var(--shu);background:#FDEEEA}
+
+/* ---------- chips (build) ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.85rem}
+.chip{
+  font-family:var(--zh);font-size:1.02rem;
+  background:#FCFAF6;color:var(--ink);border:1px solid #DCD5CA;border-radius:6px;
+  padding:.35rem .7rem;transition:opacity .15s,border-color .15s;
+}
+.chip:hover:not(:disabled){border-color:var(--shu)}
+.chip.used{opacity:.28;pointer-events:none}
+.chip:disabled{cursor:default}
+.placed{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.7rem;min-height:2.2rem}
+.placed .chip{background:#E9F0FA;border-color:#B7CBE6}
+
+/* ---------- actions ---------- */
+.act{display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap}
+.btn{
+  border-radius:8px;padding:.62rem 1.25rem;font-size:.88rem;font-weight:700;
+  background:var(--shu);color:#fff;transition:opacity .15s
+}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.ghost{background:transparent;border:1px solid #3B5D8C;color:#C3D2E6}
+.btn.ghost:hover{border-color:#6E93C4}
+
+/* ---------- feedback ---------- */
+.fb{margin-top:.95rem;border-radius:10px;padding:.9rem 1rem;display:none}
+.fb.on{display:block;animation:rise .28s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fb.good{background:#EDF7F2;color:#14503B}
+.fb.bad{background:#FDEEEA;color:#7A2418}
+.fb .head{font-weight:800;font-size:.92rem;display:flex;align-items:center;gap:.5rem}
+.fb .mark{font-family:var(--zh);font-size:1.3rem;line-height:1}
+.fb .fix{font-family:var(--zh);font-size:1.15rem;font-weight:700;margin-top:.5rem;color:var(--green)}
+.fb .why{font-size:.82rem;margin-top:.45rem;line-height:1.65;font-family:var(--jp)}
+.fb .why b{font-family:var(--zh);font-weight:700}
+
+/* ---------- result ---------- */
+.score{background:var(--paper);color:var(--ink);border-radius:12px;padding:1.4rem 1.2rem;text-align:center}
+.score .n{font-family:var(--zh);font-size:3.2rem;font-weight:700;line-height:1;color:var(--shu)}
+.score .n span{font-size:1.1rem;color:var(--mute-2);margin-left:.2rem}
+.score .msg{font-size:.88rem;color:var(--mute-2);margin-top:.6rem}
+.rows{margin-top:1rem;display:grid;gap:.55rem}
+.row{background:#16304F;border:1px solid #26456E;border-radius:8px;padding:.7rem .9rem;display:flex;align-items:center;gap:.8rem}
+.row .lb{font-size:.85rem;font-weight:700;min-width:5.2rem}
+.row .tr{flex:1;height:6px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden}
+.row .tr i{display:block;height:100%;background:var(--green);border-radius:6px}
+.row .sc{font-size:.78rem;color:#A9BDD8;min-width:3rem;text-align:right}
+.review{margin-top:1.1rem}
+.review h3{font-size:.82rem;letter-spacing:.1em;color:#7E97BC;margin-bottom:.5rem}
+.miss{background:#16304F;border:1px solid #26456E;border-radius:8px;padding:.7rem .9rem;margin-bottom:.5rem}
+.miss .a{font-family:var(--zh);font-size:1rem;color:#F0A08E;text-decoration:line-through;text-decoration-color:var(--shu)}
+.miss .b{font-family:var(--zh);font-size:1.05rem;color:#8FE0B8;font-weight:700;margin-top:.2rem}
+.miss .c{font-size:.76rem;color:#A9BDD8;margin-top:.3rem}
+.foot{text-align:center;font-size:.7rem;color:#61799C;margin-top:2.2rem;letter-spacing:.06em}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">台湾華語 ／ 復習クイズ</div>
+    <h1>量詞と語順</h1>
+    <div class="sub" id="sub">宿題フィードバックの復習 ─ 全20問</div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="meta"><span id="mLeft">はじめる前に</span><span id="mRight"></span></div>
+  </header>
+
+  <!-- START -->
+  <section class="screen on" id="scStart">
+    <p class="lead">今回まちがえたところだけを集めました。1問ずつ答えて、その場で解説を読んでください。カテゴリを選ぶと、その分野だけ練習できます。</p>
+    <div class="modes" id="modes"></div>
+    <p class="foot">解答は保存されません。ページを閉じると最初からになります。</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="scQuiz">
+    <div class="card" id="card"></div>
+    <div class="fb" id="fb" aria-live="polite"></div>
+    <div class="act">
+      <button class="btn" id="btnMain">こたえあわせ</button>
+      <button class="btn ghost" id="btnQuit">やめる</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen" id="scResult">
+    <div class="score">
+      <div class="n" id="rScore">0<span>点</span></div>
+      <div class="msg" id="rMsg"></div>
+    </div>
+    <div class="rows" id="rRows"></div>
+    <div class="review" id="rReview"></div>
+    <div class="act">
+      <button class="btn" id="btnRetryWrong">まちがえた問題だけ、もう一度</button>
+      <button class="btn ghost" id="btnHome">最初の画面へ</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+"use strict";
+
+/* ==================== 問題データ ==================== */
+const CATS = {
+  liang: { name:"量詞",     note:"這・那・幾・一 の後ろ" },
+  pos:   { name:"位置ルール", note:"時点は前、長さは後ろ" },
+  lit:   { name:"直訳注意",   note:"是・有・在 の使いすぎ" },
+  form:  { name:"型の総復習", note:"的・過・嗎・乾脆" }
+};
+
+const Q = [
+/* ---- 量詞 ---- */
+{cat:"liang",type:"choice",
+ q:"這（　）電腦我用了五年了。",jp:"このパソコンは5年使っています。",
+ opts:["台","張","件","部"],ans:0,
+ why:"機械類の量詞は <b>台</b>（ㄊㄞˊ）。パソコン・洗濯機・車・テレビはすべて 台 です。宿題では量詞そのものが抜けていました。"},
+
+{cat:"liang",type:"choice",
+ q:"那（　）椅子你用多久了？",jp:"その椅子、どのくらい使っていますか。",
+ opts:["張","個","台","件"],ans:0,
+ why:"椅子・紙・テーブル・ベッド・切符など、平らな面のあるものは <b>張</b>（ㄓㄤ）。宿題の⑧では正しく書けていました。"},
+
+{cat:"liang",type:"spot",
+ q:"まちがっている字をタップしてください。",jp:"この椅子は6年使っています。",
+ sentence:"這個椅子我用了六年了。",target:[1,2],fix:"這張椅子我用了六年了。",
+ why:"椅子は <b>個</b> ではなく <b>張</b>。迷ったときの汎用量詞は 個 ですが、椅子には専用の量詞があります。"},
+
+{cat:"liang",type:"choice",
+ q:"一（　）咖啡",jp:"コーヒー1杯",
+ opts:["杯","個","張","台"],ans:0,
+ why:"容器に入った飲み物は <b>杯</b>（ㄅㄟ）。お茶も水も同じです。"},
+
+{cat:"liang",type:"choice",
+ q:"正しいのはどれですか。",jp:"この服",
+ opts:["這件衣服","這衣服","這張衣服","這台衣服"],ans:0,
+ why:"衣類は <b>件</b>（ㄐㄧㄢˋ）。そして「這・那・幾・一」の後ろには、必ず量詞が入ります。量詞を飛ばした「這衣服」は成立しません。"},
+
+/* ---- 位置ルール ---- */
+{cat:"pos",type:"build",
+ q:"語を並べかえて、正しい文にしてください。",jp:"朝起きて、その後歯を磨きます。（前半のみ）",
+ chips:["先","我","起床","早上"],ans:"我早上先起床",
+ why:"時点（いつ）を表す <b>早上</b> は動詞の前。宿題の「先起床早上」は、日本語の語順のまま置いたための誤りです。"},
+
+{cat:"pos",type:"choice",
+ q:"正しいのはどれですか。",jp:"昨日、2時間テレビを見ました。",
+ opts:["昨天我看了兩個小時的電視。","昨天我看電視兩個小時。","昨天我兩個小時看了電視。","昨天看了電視兩個小時的。"],ans:0,
+ why:"時間の長さは動詞の後ろ。<b>動詞＋了＋時間量＋的＋目的語</b> の形にします。宿題ではこの構造そのものは正解でした。"},
+
+{cat:"pos",type:"spot",
+ q:"直したほうがよい部分をタップしてください。",jp:"まず電車に40分乗って、それから10分歩きます。",
+ sentence:"先搭電車四十分鐘，然後再走十分鐘。",target:[2,8],fix:"先搭四十分鐘的電車，然後再走十分鐘。",
+ why:"<b>搭電車</b> は「動詞＋目的語」で、その後ろに時間量は置けません。<b>搭＋四十分鐘＋的＋電車</b> の順にします。"},
+
+{cat:"pos",type:"spot",
+ q:"まちがっている部分をタップしてください。",jp:"昨日、2時間テレビを見ました。",
+ sentence:"昨天我看了二小時的電視。",target:[5,8],fix:"昨天我看了兩個小時的電視。",
+ why:"数量の「2」は 二 ではなく <b>兩</b>。さらに時間の単位には 個 が入って <b>兩個小時</b> となります。"},
+
+{cat:"pos",type:"choice",
+ q:"時点（いつ）は動詞の前。では、時間の長さ（どのくらい）は？",jp:"",
+ opts:["動詞の後ろ","動詞の前","文のいちばん前","主語の前"],ansJa:true,ans:0,
+ why:"<b>時点は前、長さは後ろ</b>。この1行だけ覚えておけば、宿題の②-③と③-③はどちらも防げます。"},
+
+/* ---- 直訳注意 ---- */
+{cat:"lit",type:"choice",
+ q:"正しいのはどれですか。",jp:"夏は、夜もだんだん暑くなっていきます。",
+ opts:["夏天，晚上也會慢慢熱起來。","夏天是晚上也會慢慢熱。","夏天有晚上也會慢慢熱。","夏天在晚上也慢慢熱了。"],ans:0,
+ why:"「〜は」を <b>是</b> と訳さないこと。是 は「A＝B」のときだけです。また 熱 は形容詞なので、変化を出すには <b>熱起來</b> か 變熱 を使います。"},
+
+{cat:"lit",type:"spot",
+ q:"直したほうがよい部分をタップしてください。",jp:"遠いけれど、行く価値があります。",
+ sentence:"雖然很遠，但是去有值得。",target:[7,11],fix:"雖然很遠，但是很值得。",
+ why:"「価値がある」の「ある」を <b>有</b> と訳さないこと。<b>值得</b>（ㄓˊ ㄉㄜ˙）の一語で「価値がある」という意味になります。"},
+
+{cat:"lit",type:"choice",
+ q:"正しいのはどれですか。",jp:"この椅子は6年使っています。（今も使用中）",
+ opts:["這張椅子我用了六年了。","這張椅子我在用六年。","這張椅子我有用六年。","這張椅子我用六年在。"],ans:0,
+ why:"<b>在＋動詞</b> は「今まさに〜している」という進行の形で、時間の長さは表せません。継続は <b>用了六年了</b>。文末の 了 が「今も続いている」印です。"},
+
+{cat:"lit",type:"choice",
+ q:"「是」を使ってよいのはどれですか。",jp:"",
+ opts:["我是日本人。","夏天是很熱。","這個蛋糕是很好吃。","我是喜歡咖啡。"],ans:0,
+ why:"是 は名詞と名詞をつなぐ語です。形容詞（很熱・很好吃）や動詞（喜歡）の前には入りません。日本語の「は」につられないようにします。"},
+
+{cat:"lit",type:"choice",
+ q:"より自然なのはどれですか。",jp:"今日は雨だけれど、私たちは出かけるつもりです。",
+ opts:["雖然今天下雨，但是我們還是要出門。","雖然下雨，但是我們會出去。","雖然今天有雨，但是我們是出門。","今天下雨，可是我們會出去了。"],ans:0,
+ why:"「〜するつもり」は 會 より <b>要</b>。逆接は <b>還是</b> を足すと締まります。出去 より <b>出門</b> のほうが「外出する」という意味に近くなります。"},
+
+/* ---- 型の総復習 ---- */
+{cat:"form",type:"choice",
+ q:"「曾經」とセットで使うのはどれですか。",jp:"",
+ opts:["過","了","著","在"],ans:0,
+ why:"<b>曾經 …… 過</b> で「かつて〜したことがある」。文末の 過 まで書いて、はじめて経験の形が完成します。"},
+
+{cat:"form",type:"build",
+ q:"語を並べかえて、正しい文にしてください。",jp:"かつて服飾店で働いていたことがあります。",
+ chips:["上班過","我","在服飾店","曾經"],ans:"我曾經在服飾店上班過",
+ why:"主語 <b>我</b> を省略しないこと。<b>曾經＋在＋場所＋動詞＋過</b> の並びで覚えておくと迷いません。"},
+
+{cat:"form",type:"choice",
+ q:"正しいのはどれですか。",jp:"その椅子、どのくらい使っていますか。",
+ opts:["那張椅子你用多久了？","那張椅子你用多久了嗎？","那個椅子你用多久嗎？","那張椅子你多久用了嗎？"],ans:0,
+ why:"<b>多久</b> という疑問詞がすでに入っているので、文末に 嗎 は付けません。宿題の⑧はここが完全に正解でした。"},
+
+{cat:"form",type:"choice",
+ q:"正しいのはどれですか。",jp:"私が昨日買ったケーキは、とてもおいしかったです。",
+ opts:["我昨天買的蛋糕很好吃。","我昨天買蛋糕的很好吃。","昨天我買的很好吃蛋糕。","我昨天的買蛋糕很好吃。"],ans:0,
+ why:"<b>［動詞句］＋的＋名詞</b>。的 の後ろに必ず名詞が来ます。前回いちばん多かったつまずきですが、今回は定着しています。"},
+
+{cat:"form",type:"build",
+ q:"語を並べかえて、正しい文にしてください。",jp:"修理が高いので、いっそ新しいのを買います。",
+ chips:["買新的","所以我乾脆","因為修理很貴，"],ans:"因為修理很貴，所以我乾脆買新的",
+ why:"<b>因為＋理由，所以我乾脆＋行動</b>。乾脆（ㄍㄢ ㄘㄨㄟˋ）は「いっそ〜する」。迷った末の結論を言うときの定番です。"}
+];
+
+/* ==================== 状態 ==================== */
+let pool = [], idx = 0, results = [], answered = false, picked = null, placed = [];
+
+const $ = (id) => document.getElementById(id);
+
+/* ==================== スタート画面 ==================== */
+function buildModes(){
+  const box = $("modes");
+  box.innerHTML = "";
+  const items = [{key:"all",n:"全",t:"全問に挑戦",d:"20問・カテゴリ混合",c:"20問"}]
+    .concat(Object.keys(CATS).map(k=>({
+      key:k, n:CATS[k].name[0], t:CATS[k].name, d:CATS[k].note,
+      c:Q.filter(q=>q.cat===k).length+"問"
+    })));
+  items.forEach(it=>{
+    const b = document.createElement("button");
+    b.className = "mode";
+    b.innerHTML = `<span class="n">${it.n}</span>
+      <span><span class="t">${it.t}</span><span class="d">${it.d}</span></span>
+      <span class="c">${it.c}</span>`;
+    b.addEventListener("click",()=>start(it.key));
+    box.appendChild(b);
+  });
+}
+
+function show(id){
+  ["scStart","scQuiz","scResult"].forEach(s=>$(s).classList.toggle("on", s===id));
+}
+
+function start(key){
+  pool = key==="all" ? Q.map((_,i)=>i) : Q.map((_,i)=>i).filter(i=>Q[i].cat===key);
+  pool = shuffle(pool.slice());
+  idx = 0; results = [];
+  $("sub").textContent = key==="all" ? "宿題フィードバックの復習 ─ 全20問" : CATS[key].name+" ─ "+pool.length+"問";
+  show("scQuiz");
+  render();
+}
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ==================== 出題 ==================== */
+function render(){
+  answered = false; picked = null; placed = [];
+  const q = Q[pool[idx]];
+  const card = $("card");
+  const cat = CATS[q.cat];
+
+  let body = `<span class="tag">${cat.name}</span>
+              <div class="q">${q.q}</div>`;
+  if(q.jp) body += `<div class="q-jp">${q.jp}</div>`;
+
+  if(q.type==="choice"){
+    body += `<div class="opts">` + q.opts.map((o,i)=>
+      `<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span><span class="v ${q.ansJa?"ja":""}">${o}</span></button>`
+    ).join("") + `</div>`;
+  }
+  if(q.type==="spot"){
+    body += `<div class="instr">文字のマスをタップしてください。</div>` + sheetHTML(q.sentence, true);
+  }
+  if(q.type==="build"){
+    body += `<div class="instr">語をタップして順に並べます。もう一度タップすると外せます。</div>`
+          + `<div class="sheet" id="sheet"></div>`
+          + `<div class="chips" id="chips">` + shuffle(q.chips.slice()).map((c,i)=>
+              `<button class="chip" data-c="${c}">${c}</button>`).join("") + `</div>`;
+  }
+  card.innerHTML = body;
+
+  if(q.type==="choice") card.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",onPick));
+  if(q.type==="spot")  card.querySelectorAll(".cell.tap").forEach(b=>b.addEventListener("click",onSpot));
+  if(q.type==="build"){
+    card.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",onChip));
+    drawBuild();
+  }
+
+  $("fb").className = "fb";
+  $("fb").innerHTML = "";
+  $("btnMain").textContent = "こたえあわせ";
+  $("btnMain").disabled = true;
+  updateBar();
+}
+
+function sheetHTML(text, tappable){
+  const chars = Array.from(text);
+  let h = `<div class="sheet">`;
+  chars.forEach((c,i)=>{
+    h += `<div class="cell${tappable?" tap":""}" data-i="${i}"${tappable?' role="button" tabindex="0"':""}>${c}</div>`;
+  });
+  h += `</div>`;
+  return h;
+}
+
+function drawBuild(){
+  const q = Q[pool[idx]];
+  const sheet = $("sheet");
+  const cur = Array.from(placed.join(""));
+  const total = Array.from(q.ans).length;
+  let h = "";
+  for(let i=0;i<total;i++){
+    h += `<div class="cell${i<cur.length?"":" pend"}">${i<cur.length?cur[i]:"　"}</div>`;
+  }
+  sheet.innerHTML = h;
+
+  $("btnMain").disabled = cur.length !== total;
+}
+
+/* ==================== 操作 ==================== */
+function onPick(e){
+  if(answered) return;
+  const card = $("card");
+  card.querySelectorAll(".opt").forEach(b=>b.style.borderColor="");
+  picked = Number(e.currentTarget.dataset.i);
+  e.currentTarget.style.borderColor = "var(--shu)";
+  $("btnMain").disabled = false;
+}
+
+function onSpot(e){
+  if(answered) return;
+  const card = $("card");
+  card.querySelectorAll(".cell").forEach(c=>c.classList.remove("hit"));
+  picked = Number(e.currentTarget.dataset.i);
+  e.currentTarget.classList.add("hit");
+  $("btnMain").disabled = false;
+}
+
+function onChip(e){
+  if(answered) return;
+  const el = e.currentTarget, txt = el.dataset.c;
+  if(el.classList.contains("used")){
+    el.classList.remove("used");
+    const p = placed.lastIndexOf(txt);
+    if(p>-1) placed.splice(p,1);
+  }else{
+    el.classList.add("used");
+    placed.push(txt);
+  }
+  drawBuild();
+}
+
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="Enter" && document.activeElement && document.activeElement.classList.contains("cell")){
+    document.activeElement.click();
+  }
+});
+
+/* ==================== 採点 ==================== */
+$("btnMain").addEventListener("click", ()=>{
+  if(!answered){ grade(); }
+  else { next(); }
+});
+$("btnQuit").addEventListener("click", ()=>{ finish(); });
+$("btnHome").addEventListener("click", ()=>{ show("scStart"); resetBar(); });
+$("btnRetryWrong").addEventListener("click", ()=>{
+  const wrong = results.filter(r=>!r.ok).map(r=>r.qi);
+  if(!wrong.length) return;
+  pool = shuffle(wrong.slice()); idx = 0; results = [];
+  $("sub").textContent = "まちがえた問題だけ ─ "+pool.length+"問";
+  show("scQuiz"); render();
+});
+
+function grade(){
+  const q = Q[pool[idx]];
+  const card = $("card");
+  let ok = false, yours = "";
+
+  if(q.type==="choice"){
+    ok = picked === q.ans;
+    yours = q.opts[picked];
+    card.querySelectorAll(".opt").forEach((b,i)=>{
+      b.disabled = true; b.style.borderColor="";
+      if(i===q.ans) b.classList.add("correct");
+      else if(i===picked) b.classList.add("wrong");
+    });
+  }
+  if(q.type==="spot"){
+    ok = picked >= q.target[0] && picked < q.target[1];
+    yours = q.sentence;
+    card.querySelectorAll(".cell").forEach((c,i)=>{
+      c.classList.remove("tap");
+      if(i>=q.target[0] && i<q.target[1]) c.classList.add("hit");
+    });
+  }
+  if(q.type==="build"){
+    ok = placed.join("") === q.ans;
+    yours = placed.join("");
+    card.querySelectorAll(".chip").forEach(b=>b.disabled=true);
+    if(ok) card.querySelectorAll("#sheet .cell").forEach(c=>c.classList.add("ok"));
+  }
+
+  results.push({qi:pool[idx], ok, yours, cat:q.cat});
+  answered = true;
+
+  const fb = $("fb");
+  fb.className = "fb on " + (ok?"good":"bad");
+  const fix = q.fix || (q.type==="choice" ? q.opts[q.ans] : q.ans + "。");
+  fb.innerHTML =
+    `<div class="head"><span class="mark">${ok?"○":"／"}</span>${ok?"正解です":"惜しい"}</div>`
+    + (ok ? "" : `<div class="fix">正 ${fix}</div>`)
+    + `<div class="why">${q.why}</div>`;
+
+  $("btnMain").textContent = (idx === pool.length-1) ? "結果を見る" : "つぎの問題";
+  $("btnMain").disabled = false;
+  updateBar();
+}
+
+function next(){
+  idx++;
+  if(idx >= pool.length){ finish(); return; }
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ==================== 結果 ==================== */
+function finish(){
+  if(!results.length){ show("scStart"); resetBar(); return; }
+  const n = results.length, c = results.filter(r=>r.ok).length;
+  const pct = Math.round(c/n*100);
+  $("rScore").innerHTML = pct + `<span>点</span>`;
+  $("rMsg").textContent = `${n}問中 ${c}問 正解` + (
+    pct===100 ? " ─ 文句なしです。次は量詞を会話で使ってみましょう。" :
+    pct>=80 ? " ─ よくできています。まちがえた型だけ、もう一度。" :
+    pct>=50 ? " ─ 型そのものは見えています。表を見ながらで大丈夫です。" :
+              " ─ 焦らずに。解説をもう一度読んでから再挑戦してください。");
+
+  const rows = $("rRows"); rows.innerHTML = "";
+  Object.keys(CATS).forEach(k=>{
+    const rs = results.filter(r=>r.cat===k);
+    if(!rs.length) return;
+    const ok = rs.filter(r=>r.ok).length;
+    const p = Math.round(ok/rs.length*100);
+    const d = document.createElement("div");
+    d.className = "row";
+    d.innerHTML = `<span class="lb">${CATS[k].name}</span>
+      <span class="tr"><i style="width:${p}%"></i></span>
+      <span class="sc">${ok}/${rs.length}</span>`;
+    rows.appendChild(d);
+  });
+
+  const rev = $("rReview");
+  const wrong = results.filter(r=>!r.ok);
+  if(wrong.length){
+    rev.innerHTML = `<h3>まちがえた問題</h3>` + wrong.map(r=>{
+      const q = Q[r.qi];
+      const fix = q.fix || (q.type==="choice" ? q.opts[q.ans] : q.ans+"。");
+      const mine = q.type==="spot" ? q.sentence : (r.yours || "（未回答）");
+      return `<div class="miss"><div class="a">${mine}</div>
+              <div class="b">${fix}</div>
+              <div class="c">${q.why.replace(/<\/?b>/g,"")}</div></div>`;
+    }).join("");
+    $("btnRetryWrong").style.display = "";
+  }else{
+    rev.innerHTML = `<h3>まちがえた問題</h3><div class="miss"><div class="c">ありません。全問正解です。</div></div>`;
+    $("btnRetryWrong").style.display = "none";
+  }
+
+  show("scResult");
+  $("bar").style.width = "100%";
+  $("mLeft").textContent = "おわり";
+  $("mRight").textContent = c + " / " + n + " 正解";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ==================== 進捗 ==================== */
+function updateBar(){
+  const done = answered ? idx+1 : idx;
+  $("bar").style.width = (done/pool.length*100) + "%";
+  $("mLeft").textContent = `第 ${idx+1} 問 ／ 全 ${pool.length} 問`;
+  const ok = results.filter(r=>r.ok).length;
+  $("mRight").textContent = results.length ? `${ok} / ${results.length} 正解` : "";
+}
+function resetBar(){
+  $("bar").style.width = "0";
+  $("mLeft").textContent = "はじめる前に";
+  $("mRight").textContent = "";
+  $("sub").textContent = "宿題フィードバックの復習 ─ 全20問";
+}
+
+buildModes();
+</script>
+</body>
+</html>
