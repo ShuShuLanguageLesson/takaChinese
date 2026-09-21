@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>第20回 宿題ふりかえりクイズ｜しゅうしゅう先生</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#13315C; --navy2:#2C5282; --coral:#E4575F; --coral-bg:#FDEEEE;
+  --ok:#1B7A55; --ok-bg:#EDF7F2; --ng:#C0392B; --ng-bg:#FDF1EC;
+  --amber:#B7791F; --amber-bg:#FBF3E4;
+  --paper:#F4F6FA; --card:#FFFFFF; --line:#D7DEE9; --mist:#E1E7F0; --mute:#5A6478; --faint:#8A93A6;
+  --jp:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
+  --cn:"Noto Serif TC","PMingLiU","Songti TC","MingLiU",serif;
+  --zy:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{font-family:var(--jp);background:var(--paper);color:var(--navy);min-height:100%;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);line-height:1.6}
+.wrap{max-width:560px;margin:0 auto;padding:20px 16px 56px}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+.hidden{display:none!important}
+
+/* ---------- start ---------- */
+.brand{font-size:.8rem;color:var(--mute);font-weight:500}
+h1{font-size:1.75rem;font-weight:900;line-height:1.3;margin:6px 0 10px}
+.lead{color:var(--mute);font-size:.95rem;margin-bottom:22px}
+.types{display:grid;gap:10px;margin-bottom:26px}
+.type{width:100%;text-align:left;font:inherit;color:inherit;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;cursor:pointer}
+.type:hover{border-color:var(--navy)}
+.type .stamp{width:56px;height:56px;border-radius:50%;border:2.5px solid var(--navy);color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:1.25rem;transform:rotate(-8deg)}
+.stamp.t{border-color:var(--coral)!important;color:var(--coral)!important}
+.stamp.p{border-color:var(--navy2)!important;color:var(--navy2)!important}
+.stamp.b{border-color:var(--amber)!important;color:var(--amber)!important}
+.type .tx{display:block;min-width:0}
+.type b{display:block;font-size:1rem}
+.type small{color:var(--mute);font-size:.82rem;display:block}
+.type .ex{display:block;font-family:var(--cn);font-size:.95rem;margin-top:2px}
+.type .pg{font-size:.78rem;font-weight:700;color:var(--mute);text-align:right;white-space:nowrap}
+.type .pg.done{color:var(--ok)}
+.sec-h{font-size:.95rem;font-weight:900;margin:26px 0 10px}
+#menu-main .ghost{margin-top:10px}
+.type .ex s{color:var(--faint)}
+.primary{display:block;width:100%;border:none;border-radius:14px;background:var(--navy);color:#fff;font-size:1.1rem;font-weight:700;padding:16px}
+.primary:active{transform:translateY(1px)}
+.ghost{display:block;width:100%;border:1.5px solid var(--navy);border-radius:14px;background:transparent;color:var(--navy);font-size:1rem;font-weight:700;padding:13px;margin-top:10px}
+.note{font-size:.8rem;color:var(--faint);margin-top:14px}
+
+/* ---------- meters (the memorable bit) ---------- */
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--paper);padding:8px 0 10px;margin:-8px 0 8px;box-shadow:0 1px 0 var(--line)}
+.hud .topbar{position:static;margin:0;padding:0 0 8px}
+.meters{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.meter{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:7px 8px 8px}
+.meter:hover{border-color:var(--navy2)}
+.meter.on{border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy)}
+.meter.on .lb{color:var(--navy)}
+.seg.now{box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px var(--navy)}
+.meter .lb{font-size:.72rem;font-weight:700;color:var(--mute);display:flex;justify-content:space-between}
+.segs{display:flex;gap:3px;margin-top:5px}
+.seg{flex:1;height:8px;border-radius:3px;background:var(--mist);transition:background .25s}
+.seg.ok{background:var(--ok)} .seg.ng{background:var(--coral)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--paper);
+  display:flex;align-items:center;gap:10px;padding:8px 0;margin-top:-8px}
+.topbar .t{font-weight:900;font-size:1rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.menu-btn{flex:none;display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--navy);background:#fff;color:var(--navy);
+  border-radius:999px;padding:5px 12px 5px 10px;font-size:.85rem;font-weight:700}
+.menu-btn:hover{background:var(--navy);color:#fff}
+.menu-btn svg{width:14px;height:14px}
+.topbar .n{font-size:.9rem;color:var(--mute);font-variant-numeric:tabular-nums}
+.combo{font-size:.8rem;font-weight:700;color:var(--coral);min-height:1.2em;text-align:right}
+
+/* ---------- question ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 16px}
+.chip{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:2px 10px;background:var(--mist);color:var(--navy)}
+.chip.q{background:#E6ECF5;color:var(--navy)} .chip.t{background:var(--coral-bg);color:#B23A42}
+.chip.p{background:#E4ECF7;color:var(--navy2)} .chip.b{background:var(--amber-bg);color:var(--amber)}
+.src{font-size:.75rem;color:var(--faint);margin-left:6px}
+.jp{font-size:1.05rem;font-weight:700;margin:12px 0 4px}
+.ask{font-size:.82rem;color:var(--mute);margin-bottom:12px}
+.stem{font-family:var(--cn);font-size:1.6rem;font-weight:700;line-height:1.5;margin:6px 0 16px;word-break:break-all}
+.blank{display:inline-block;min-width:2.2em;border-bottom:3px solid var(--coral);text-align:center;margin:0 3px;line-height:1.2}
+.blank.ok{color:var(--ok);border-color:var(--ok)} .blank.ng{color:var(--ng);border-color:var(--ng)}
+.opts{display:grid;gap:10px}
+.opts.words{grid-template-columns:repeat(2,1fr)}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--navy);font-family:var(--cn);font-size:1.1rem;font-weight:500;line-height:1.5;display:flex;gap:10px;align-items:flex-start}
+.opts.words .opt{font-size:1.45rem;justify-content:center;text-align:center;font-weight:700}
+.opt .k{font-family:var(--jp);font-size:.72rem;color:var(--faint);font-weight:700;min-width:1em;padding-top:4px}
+.opts.words .opt .k{display:none}
+.opt:hover:not(:disabled){border-color:var(--navy2)}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}
+.opt.ng{border-color:var(--ng);background:var(--ng-bg);color:var(--ng)}
+.opt.soft{border-color:var(--amber);background:var(--amber-bg);color:var(--amber)}
+.opt.dim{opacity:.45}
+
+/* order */
+.build{font-family:var(--cn);font-size:1.35rem;font-weight:700;min-height:64px;border:1.5px dashed var(--line);border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
+.build .fix{color:var(--faint)}
+.build.ok{border-color:var(--ok);border-style:solid;background:var(--ok-bg)}
+.build.ng{border-color:var(--ng);border-style:solid;background:var(--ng-bg)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:52px;margin-bottom:14px}
+.tok{font-family:var(--cn);font-size:1.25rem;font-weight:700;border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:10px;padding:6px 12px}
+.build .tok{border-color:var(--navy2);background:#EEF3FA}
+.tok:disabled{cursor:default}
+.row2{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.row2 button{border-radius:12px;padding:12px;font-weight:700;font-size:1rem}
+.btn-reset{border:1.5px solid var(--line);background:#fff;color:var(--mute)}
+.btn-check{border:none;background:var(--navy);color:#fff}
+.btn-check:disabled{background:var(--line);color:var(--faint);cursor:default}
+
+/* feedback */
+.fb{margin-top:16px;border-radius:14px;padding:14px 16px;border:1.5px solid}
+.fb.ok{background:var(--ok-bg);border-color:#BFE3D0}
+.fb.ng{background:var(--ng-bg);border-color:#F2CFC3}
+.fb.soft{background:var(--amber-bg);border-color:#EBD3AA}
+.fb .st{font-weight:900;font-size:1.05rem}
+.fb.ok .st{color:var(--ok)} .fb.ng .st{color:var(--ng)} .fb.soft .st{color:var(--amber)}
+.full{display:flex;gap:10px;align-items:center;margin:10px 0 8px}
+.full .cn{font-family:var(--cn);font-size:1.3rem;font-weight:700;line-height:1.5}
+.say{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--navy);background:#fff;font-size:1.05rem;display:grid;place-items:center}
+.zys{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.zy{background:#fff;border:1px solid var(--line);border-radius:8px;padding:2px 8px;font-size:.88rem}
+.zy .h{font-family:var(--cn);font-weight:700;margin-right:6px}
+.zy .z{font-family:var(--zy);color:var(--coral)}
+.fb ul{padding-left:1.1em;font-size:.9rem;color:var(--navy)}
+.fb li{margin:3px 0}
+.rec{display:inline-block;margin-top:8px;font-size:.85rem;font-weight:700;color:var(--navy2)}
+.next{margin-top:14px}
+
+/* result */
+.score{font-size:3.2rem;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.score small{font-size:1.2rem;color:var(--mute);font-weight:700}
+.rmeters{display:grid;gap:10px;margin:18px 0}
+.rm{width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;display:grid;grid-template-columns:6.5em 1fr 3.2em;gap:10px;align-items:center}
+.rm:hover{border-color:var(--navy2)}
+.hint{font-size:.8rem;color:var(--faint);margin:-8px 0 16px}
+.sec-card .score{margin:12px 0 6px}
+.sec-msg{color:var(--mute);font-size:.95rem;margin-bottom:14px}
+#sec-actions{margin-top:16px}
+#sec-actions .ghost{margin-top:10px}
+.rm .nm{font-weight:700;font-size:.9rem}
+.rm .bar{height:10px;border-radius:5px;background:var(--mist);overflow:hidden}
+.rm .bar i{display:block;height:100%;background:var(--ok);border-radius:5px;transition:width .6s ease}
+.rm .v{text-align:right;font-size:.85rem;color:var(--mute);font-variant-numeric:tabular-nums}
+.msg{background:var(--card);border-left:0;border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:.95rem;margin-bottom:18px}
+.msg b{color:var(--coral)}
+.steps{display:flex;gap:6px;margin-top:8px;font-size:.8rem;flex-wrap:wrap}
+.steps span{background:var(--paper);border-radius:8px;padding:3px 8px;font-weight:700}
+h2{font-size:1rem;font-weight:900;margin:22px 0 10px}
+.miss{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.miss .cn{font-family:var(--cn);font-weight:700;font-size:1.1rem}
+.miss .ex{font-size:.85rem;color:var(--mute)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (max-width:380px){.meters{gap:5px}.meter{padding:6px 6px 7px}.stem{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- MENU -->
+<section id="s-start">
+  <p class="brand">しゅうしゅう先生／台湾華語レッスン</p>
+  <h1>第20回 宿題<br>ふりかえりクイズ</h1>
+  <p class="lead">宿題の誤りは、3種類だけでした。全部通してやっても、セクションを選んでもOK。途中でメニューに戻っても、答えた分はそのまま残ります。</p>
+  <div id="menu-main"></div>
+  <h2 class="sec-h">セクションを選ぶ</h2>
+  <div class="types" id="menu-secs"></div>
+  <p class="note">各セクション内の問題の順番はシャッフルされます。🔊 で正しい文を読み上げます（端末の音声機能を使用）。ページを閉じると記録はリセットされます。</p>
+</section>
+
+<!-- HUD: menu button + section tabs, always visible while playing -->
+<div id="hud" class="hud hidden">
+  <div class="topbar"><button class="menu-btn" data-menu aria-label="メインメニューに戻る"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 7.5 8 2.5l6 5M3.8 6.2V13.5h8.4V6.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>メニュー</button><span class="t">第20回 宿題ふりかえり</span><span class="n" id="prog"></span></div>
+  <nav class="meters" id="meters" aria-label="セクション"></nav>
+</div>
+
+<!-- PLAY -->
+<section id="s-play" class="hidden">
+  <div class="combo" id="combo" aria-live="polite"></div>
+  <div class="card">
+    <span class="chip" id="chip"></span><span class="src" id="src"></span>
+    <p class="jp" id="jp"></p>
+    <p class="ask" id="ask"></p>
+    <div id="body"></div>
+    <div id="fb" class="fb hidden" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- SECTION SUMMARY -->
+<section id="s-sec" class="hidden">
+  <div class="card sec-card">
+    <span class="chip" id="sec-chip"></span>
+    <p class="score" id="sec-score"></p>
+    <p class="sec-msg" id="sec-msg"></p>
+    <div id="sec-misses"></div>
+    <div id="sec-actions"></div>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="s-result" class="hidden">
+  <div class="topbar"><button class="menu-btn" data-menu aria-label="メインメニューに戻る"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 7.5 8 2.5l6 5M3.8 6.2V13.5h8.4V6.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>メニュー</button><span class="t">第20回 宿題ふりかえり　結果</span></div>
+  <p class="score" id="score"></p>
+  <div class="rmeters" id="rmeters"></div>
+  <p class="hint">セクションをタップすると、そのセクションの確認とやり直しができます。</p>
+  <div class="msg" id="msg"></div>
+  <a class="rec" href="https://voca.ro/17ezUyMTnT2y" target="_blank" rel="noopener">🎧 3つの型のまとめを、先生の録音で聞く</a>
+  <div id="misswrap"><h2>間違えた問題</h2><div id="misses"></div></div>
+  <button class="primary" id="btn-retry" style="margin-top:18px">間違えた問題だけ、もう一度</button>
+  <button class="ghost" id="btn-again">最初から、もう一度</button>
+  <button class="ghost" data-menu>メインメニューに戻る</button>
+</section>
+
+</div>
+<script>
+const REC = {
+  a:'https://voca.ro/18ctRiOO27lI',   // ②-①②
+  b:'https://voca.ro/1gEBuOysunRC',   // ②-③④
+  c:'https://voca.ro/13N9JMwK06sF'    // ②-⑤
+};
+const CATS = {
+  q:{name:'量詞', full:'量詞の抜け',  stamp:'量', desc:'「這・那・幾・一」の後ろには必ず量詞', ng:'這電腦', ok:'這台電腦'},
+  t:{name:'直訳', full:'日本語の直訳', stamp:'訳', desc:'「は→是」「ある→有」「ている→在」にしない', ng:'去有值得', ok:'很值得'},
+  p:{name:'位置', full:'位置ルール',  stamp:'位', desc:'時点は動詞の前、時間の長さは後ろ、「了」は文末', ng:'先起床早上', ok:'早上先起床'},
+  b:{name:'型',   full:'型と自然さ',  stamp:'型', desc:'曾經〜過・兩・乾脆・去＋場所＋動詞', ng:'二小時', ok:'兩個小時'}
+};
+const CAT_ORDER=['q','t','p','b'];
+const ASK_BLANK='空欄に入るのはどれ？', ASK_SENT='正しい中国語はどれ？', ASK_ORDER='語をタップして並べ、文を完成させましょう。';
+
+const Q = [
+  /* ---- 量詞 ---- */
+  {id:'q1',cat:'q',src:'宿題②-②',jp:'このパソコンは5年使っています。（今も使用中）',stem:'這{}電腦我用了五年了。',
+   opts:['台','張','個','件'],ans:'台',full:'這台電腦我用了五年了。',
+   zy:[['台','ㄊㄞˊ'],['電腦','ㄉㄧㄢˋ ㄋㄠˇ']],
+   exp:['パソコンは機械類なので量詞は「台」。','構文は完璧。宿題で抜けていたのは「台」だけでした。'],rec:REC.a},
+  {id:'q2',cat:'q',src:'宿題③-②',jp:'この椅子',stem:'這{}椅子',
+   opts:['張','個','台','支'],ans:'張',full:'這張椅子',
+   zy:[['張','ㄓㄤ'],['椅子','ㄧˇ ˙ㄗ']],
+   exp:['椅子は「平らな面のもの」なので「張」。「個」ではありません。','③-⑧ では「這張椅子」と正しく書けていました。']},
+  {id:'q3',cat:'q',src:'量詞ミニ表',jp:'このスマホ',stem:'這{}手機',
+   opts:['支','張','件','杯'],ans:'支',full:'這支手機',
+   zy:[['支','ㄓ'],['手機','ㄕㄡˇ ㄐㄧ']],
+   exp:['台湾では、携帯電話は「支」で数えるのが一般的です。']},
+  {id:'q4',cat:'q',src:'量詞ミニ表',jp:'この服',stem:'這{}衣服',
+   opts:['件','張','台','杯'],ans:'件',full:'這件衣服',
+   zy:[['件','ㄐㄧㄢˋ'],['衣服','ㄧ ˙ㄈㄨ']],
+   exp:['服・上着・事柄は「件」。']},
+  {id:'q5',cat:'q',src:'量詞のルール',jp:'量詞が抜けているのはどれ？',ask:'「這・那・幾・一」の後ろを見てみましょう。',
+   opts:['這電腦','這台電腦','那張椅子','一杯咖啡'],ans:'這電腦',full:'這電腦 → 這台電腦',say:'這台電腦',
+   ngMsg:'量詞が抜けているのは「這電腦」でした',
+   zy:[['這','ㄓㄜˋ'],['那','ㄋㄚˋ']],
+   exp:['「這・那・幾・一」の後ろには、必ず量詞を挟みます。'],words:true,
+   okMsg:'正解。抜けている文を見つけられました'},
+  {id:'q6',cat:'q',src:'宿題③-⑧',jp:'その椅子、どのくらい使っていますか。',
+   opts:['那張椅子你用多久了？','那張椅子你用多久了嗎？','那個椅子你用多久了？'],ans:'那張椅子你用多久了？',
+   zy:[['那','ㄋㄚˋ'],['多久','ㄉㄨㄛ ㄐㄧㄡˇ']],
+   exp:['量詞は「張」。疑問詞（多久）のある文に「嗎」は付けません。','「その」は「那」。主語「你」を入れるとより自然です。']},
+
+  /* ---- 直訳 ---- */
+  {id:'t1',cat:'t',src:'宿題②-①',jp:'夏は、夜もだんだん暑くなっていきます。',
+   opts:['夏天，晚上也會慢慢熱起來。','夏天是晚上也會慢慢熱。','夏天是晚上也會慢慢熱起來。'],ans:'夏天，晚上也會慢慢熱起來。',
+   zy:[['夏天','ㄒㄧㄚˋ ㄊㄧㄢ'],['慢慢','ㄇㄢˋ ㄇㄢˋ']],
+   exp:['「〜は」を「是」にしない。「是」は A＝B のときだけ。','「熱」は形容詞。変化を出すなら「熱起來」か「變熱」。'],rec:REC.a},
+  {id:'t2',cat:'t',src:'宿題③-④',jp:'遠いけれど、行く価値があります。',stem:'雖然很遠，但是{}。',
+   opts:['很值得','去有值得','有值得','是值得'],ans:'很值得',full:'雖然很遠，但是很值得。',
+   zy:[['值得','ㄓˊ ˙ㄉㄜ']],
+   exp:['「価値がある」の「ある」を「有」と訳しません。「值得」一語で「価値がある」。','「值得去一趟」（一度行く価値がある）も自然な言い方です。']},
+  {id:'t3',cat:'t',src:'宿題③-②',jp:'この椅子は6年使っています。（今も使用中）',
+   opts:['這張椅子我用了六年了。','這張椅子我在用六年。','這個椅子在用六年。'],ans:'這張椅子我用了六年了。',
+   zy:[['用了','ㄩㄥˋ ˙ㄌㄜ']],
+   exp:['「在＋動詞」は進行中の動作。時間の長さは表せません。','継続は「用了六年了」。文末の「了」が、今も続いている印です。']},
+  {id:'t4',cat:'t',src:'応用',jp:'東京の夏はとても暑いです。',
+   opts:['東京的夏天很熱。','東京的夏天是很熱。','東京的夏天是熱。'],ans:'東京的夏天很熱。',
+   zy:[['熱','ㄖㄜˋ']],
+   exp:['形容詞の文に「是」は入りません。「很＋形容詞」が基本の形です。','「〜は → 是」の置き換えは、②-① と同じ直訳の罠です。']},
+
+  /* ---- 位置ルール ---- */
+  {id:'p1',cat:'p',src:'宿題②-③',type:'order',jp:'朝起きて、その後歯を磨きます。',
+   tokens:['起床','早上','我','先'],answers:['我早上先起床','早上我先起床'],suffix:'，然後再刷牙。',full:'我早上先起床，然後再刷牙。',
+   zy:[['起床','ㄑㄧˇ ㄔㄨㄤˊ'],['刷牙','ㄕㄨㄚ ㄧㄚˊ']],
+   exp:['時点（早上）は動詞の前。文頭に置いてもOKです。','「先〜，然後再〜」の枠組みは、宿題でも正しく使えていました。'],rec:REC.b},
+  {id:'p2',cat:'p',src:'宿題③-③',type:'order',jp:'まず電車に40分乗って、それから10分歩きます。',
+   prefix:'先',tokens:['電車','四十分鐘','搭','的'],answers:['搭四十分鐘的電車'],suffix:'，然後再走十分鐘。',full:'先搭四十分鐘的電車，然後再走十分鐘。',
+   zy:[['搭','ㄉㄚ'],['分鐘','ㄈㄣ ㄓㄨㄥ'],['電車','ㄉㄧㄢˋ ㄔㄜ']],
+   exp:['時間の長さは動詞の後ろ。「V＋時間量＋的＋目的語」の形です。','「搭電車」の後ろに時間量は置けません。作文では数字は漢数字で。']},
+  {id:'p3',cat:'p',src:'宿題③-⑤',type:'order',jp:'昨日、2時間テレビを見ました。',
+   tokens:['電視','看了','我','的','兩個小時','昨天'],answers:['昨天我看了兩個小時的電視','我昨天看了兩個小時的電視'],suffix:'。',full:'昨天我看了兩個小時的電視。',
+   zy:[['兩個小時','ㄌㄧㄤˇ ˙ㄍㄜ ㄒㄧㄠˇ ㄕˊ']],
+   exp:['時点（昨天）は動詞の前、時間量（兩個小時）は動詞の後ろ。','「動詞＋了＋時間量＋的＋目的語」の骨格は、宿題でも正解でした。']},
+  {id:'p4',cat:'p',src:'宿題②-⑤',jp:'仕事がもうすぐ終わります。',
+   opts:['工作快結束了。','快結束了工作。','工作快了結束。'],ans:'工作快結束了。',
+   zy:[['快','ㄎㄨㄞˋ'],['結束','ㄐㄧㄝˊ ㄕㄨˋ']],
+   exp:['「快〜了」＝もうすぐ〜。「了」は文末に置きます。','「了」の後ろに目的語（工作）を置く形は作れません。'],rec:REC.c},
+  {id:'p5',cat:'p',src:'位置ルール',jp:'40分電車に乗りました。',
+   opts:['我搭了四十分鐘的電車。','我四十分鐘搭了電車。','我搭了電車四十分鐘。'],ans:'我搭了四十分鐘的電車。',
+   zy:[['搭了','ㄉㄚ ˙ㄌㄜ']],
+   exp:['時間量（どのくらい）は動詞の後ろ、目的語の前に「的」でつなぎます。','時点（いつ）なら動詞の前：我昨天搭了電車。']},
+
+  /* ---- 型と自然さ ---- */
+  {id:'b1',cat:'b',src:'宿題③-⑤',jp:'2時間',stem:'昨天我看了{}的電視。',
+   opts:['兩個小時','二小時','二個小時'],ans:'兩個小時',full:'昨天我看了兩個小時的電視。',
+   zy:[['兩','ㄌㄧㄤˇ'],['小時','ㄒㄧㄠˇ ㄕˊ']],
+   exp:['数量の「2」は「二」ではなく「兩」。','読点は「、」ではなく「，」を使います。']},
+  {id:'b2',cat:'b',src:'宿題③-⑦',jp:'かつて服飾店で働いていたことがあります。',
+   opts:['我曾經在服飾店上班過。','曾經在服飾店上班。','我曾經上班過在服飾店。'],ans:'我曾經在服飾店上班過。',
+   zy:[['曾經','ㄘㄥˊ ㄐㄧㄥ'],['過','˙ㄍㄨㄛ']],
+   exp:['「曾經」は文末の「過」とセットで使うのが基本。','主語「我」は省略しません。']},
+  {id:'b3',cat:'b',src:'宿題②-⑤',jp:'仕事が早く終わったので、いっそレストランへ食べに行きました。',
+   opts:['因為工作提早結束了，所以我乾脆去餐廳吃飯。','因為快結束了工作，所以我乾脆去餐廳。','因為工作提早結束了，乾脆所以我去餐廳吃飯。'],ans:'因為工作提早結束了，所以我乾脆去餐廳吃飯。',
+   zy:[['乾脆','ㄍㄢ ㄘㄨㄟˋ'],['提早','ㄊㄧˊ ㄗㄠˇ']],
+   exp:['「因為A，所以B」と、乾脆の位置（主語の後ろ・動詞の前）は宿題でも正解でした。','「快〜了」ではなく「提早結束了」。「去餐廳」には「吃飯」を添えます。'],rec:REC.c},
+  {id:'b4',cat:'b',src:'宿題②-⑤',jp:'スーパーへ買い物に行きます。',
+   opts:['我去超市買東西。','我去超市。','我買東西去超市。'],ans:'我去超市買東西。',
+   zy:[['超市','ㄔㄠ ㄕˋ']],
+   exp:['「どこへ行く」で止めず、何をしに行くのかまで言うのが中国語です。','去餐廳吃飯／去公園散步 も同じ形です。'],
+   soft:{'我去超市。':'△ 文としては正しいけれど、「買い物に」が抜けています'}},
+  {id:'b5',cat:'b',src:'宿題②-③',jp:'歯を磨く',
+   opts:['刷牙','牙刷','刷牙刷'],ans:'刷牙',full:'刷牙',words:true,
+   zy:[['刷牙','ㄕㄨㄚ ㄧㄚˊ'],['牙刷','ㄧㄚˊ ㄕㄨㄚ']],
+   exp:['刷牙＝歯を磨く（動詞）。牙刷＝歯ブラシ（名詞）。'],rec:REC.b},
+  {id:'b6',cat:'b',src:'宿題②-④',jp:'今日は雨が降っているけれど、私たちは出かけるつもりです。',ask:'いちばん自然な文はどれ？',
+   opts:['雖然今天下雨，但是我們還是要出門。','雖然下雨，但是我們會出去。','雖然今天下雨，但是我們還是出門了嗎。'],ans:'雖然今天下雨，但是我們還是要出門。',
+   zy:[['還是','ㄏㄞˊ ㄕˋ'],['出門','ㄔㄨ ㄇㄣˊ']],
+   exp:['「今天」を補い、「還是」で逆接を締めます。','「〜つもり」は「會」より「要」、「出去」より「出門」が自然です。'],rec:REC.b,
+   soft:{'雖然下雨，但是我們會出去。':'△ 宿題の形。意味は通じます。自然さを一段上げましょう'}}
+];
+
+/* ---------- state ---------- */
+const $ = s => document.querySelector(s);
+let seq=[], res={}, cur=null, secView=null, combo=0, best=0, answered=false, picked=[];
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+const inCat=c=>seq.filter(q=>q.cat===c);
+const isDone=q=>q.id in res;
+const answeredN=()=>seq.filter(isDone).length;
+const allDone=()=>seq.length>0&&answeredN()===seq.length;
+const firstOpen=c=>inCat(c).find(q=>!isDone(q));
+function nextOpenCat(from){
+  const i=CAT_ORDER.indexOf(from);
+  for(let k=1;k<=CAT_ORDER.length;k++){const c=CAT_ORDER[(i+k)%CAT_ORDER.length]; if(firstOpen(c)) return c;}
+  return null;
+}
+function newSession(){seq=CAT_ORDER.flatMap(c=>shuffle(Q.filter(q=>q.cat===c)));res={};cur=null;secView=null;combo=0;best=0;}
+function ensureSession(){if(!seq.length) newSession();}
+
+function show(id){
+  ['s-start','s-play','s-sec','s-result'].forEach(s=>$('#'+s).classList.toggle('hidden',s!==id));
+  $('#hud').classList.toggle('hidden',!(id==='s-play'||id==='s-sec'));
+  try{speechSynthesis.cancel();}catch(e){}
+  window.scrollTo(0,0);
+}
+
+/* ---------- navigation ---------- */
+function goSection(c){
+  ensureSession();
+  const q=firstOpen(c);
+  if(q) openQ(q); else showSec(c);
+}
+function openQ(q){cur=q;secView=null;show('s-play');render();drawHud();}
+function next(){
+  const n=firstOpen(cur.cat);
+  if(n) openQ(n); else if(allDone()) result(); else showSec(cur.cat);
+}
+function resume(){
+  if(cur&&!isDone(cur)) return openQ(cur);
+  const base=(cur&&cur.cat)||secView||'q';
+  const c=firstOpen(base)?base:nextOpenCat(base);
+  c?goSection(c):result();
+}
+function redoSection(c){
+  inCat(c).forEach(q=>delete res[q.id]);
+  seq=CAT_ORDER.flatMap(k=>k===c?shuffle(inCat(k)):inCat(k));
+  goSection(c);
+}
+function toMenu(){show('s-start');drawMenu();const f=$('#menu-main .primary');if(f)f.focus({preventScroll:true});}
+
+/* ---------- menu ---------- */
+function drawMenu(){
+  const total=Q.length, n=seq.length?answeredN():0;
+  let m;
+  if(!n) m=`<button class="primary" id="mm-start">全部やる（${total}問）</button>`;
+  else if(allDone()) m=`<button class="primary" id="mm-result">結果を見る</button><button class="ghost" id="mm-new">最初からやり直す</button>`;
+  else m=`<button class="primary" id="mm-resume">続きから（回答 ${n} / ${total}）</button><button class="ghost" id="mm-new">最初からやり直す</button>`;
+  $('#menu-main').innerHTML=m;
+  const bind=(id,fn)=>{const b=$(id); if(b) b.onclick=fn;};
+  bind('#mm-start',()=>{ensureSession();goSection('q');});
+  bind('#mm-result',result);
+  bind('#mm-resume',resume);
+  bind('#mm-new',()=>{newSession();goSection('q');});
+
+  $('#menu-secs').innerHTML=CAT_ORDER.map(k=>{
+    const qs=seq.length?inCat(k):Q.filter(q=>q.cat===k);
+    const d=qs.filter(isDone).length, ok=qs.filter(q=>res[q.id]===true).length;
+    const pg=!d?`${qs.length}問`:d<qs.length?`回答 ${d}/${qs.length}`:`正解 ${ok}/${qs.length}`;
+    const C=CATS[k];
+    return `<button class="type" data-cat="${k}"><span class="stamp ${k}">${C.stamp}</span>
+      <span class="tx"><b>${C.full}</b><small>${esc(C.desc)}</small><span class="ex"><s>${C.ng}</s>　→　${C.ok}</span></span>
+      <span class="pg ${d&&d===qs.length?'done':''}">${pg}</span></button>`;
+  }).join('');
+  document.querySelectorAll('#menu-secs .type').forEach(b=>b.onclick=()=>goSection(b.dataset.cat));
+}
+
+/* ---------- HUD: section tabs ---------- */
+function drawHud(){
+  const active=cur?cur.cat:secView;
+  $('#prog').textContent=`回答 ${answeredN()} / ${seq.length}`;
+  $('#meters').innerHTML=CAT_ORDER.map(k=>{
+    const qs=inCat(k), okN=qs.filter(q=>res[q.id]===true).length;
+    const segs=qs.map(q=>`<i class="seg ${res[q.id]===true?'ok':res[q.id]===false?'ng':''} ${cur&&q.id===cur.id?'now':''}"></i>`).join('');
+    return `<button class="meter ${k===active?'on':''}" data-cat="${k}" aria-pressed="${k===active}" aria-label="${CATS[k].full}のセクションへ">
+      <span class="lb"><span>${CATS[k].name}</span><span>${okN}/${qs.length}</span></span><span class="segs">${segs}</span></button>`;
+  }).join('');
+  document.querySelectorAll('#meters .meter').forEach(b=>b.onclick=()=>goSection(b.dataset.cat));
+}
+
+/* ---------- question ---------- */
+function render(){
+  const q=cur; answered=false; picked=[];
+  $('#combo').textContent=combo>=3?`${combo}問連続正解`:'';
+  $('#chip').className='chip '+q.cat; $('#chip').textContent=CATS[q.cat].full;
+  const pos=inCat(q.cat).indexOf(q)+1;
+  $('#src').textContent=`${pos} / ${inCat(q.cat).length}　${q.src}`;
+  $('#jp').textContent=q.jp;
+  const fb=$('#fb'); fb.className='fb hidden'; fb.innerHTML='';
+  const body=$('#body');
+  if(q.type==='order'){
+    $('#ask').textContent=q.ask||ASK_ORDER;
+    let toks=shuffle(q.tokens.slice());
+    let guard=0; while(q.answers.includes(toks.join(''))&&guard++<20) toks=shuffle(toks);
+    body.innerHTML=`<div class="build" id="build"></div><div class="pool" id="pool"></div>
+      <div class="row2"><button class="btn-reset" id="btn-reset">やり直す</button><button class="btn-check" id="btn-check" disabled>答え合わせ</button></div>`;
+    q._toks=toks; drawOrder(q);
+    $('#btn-reset').onclick=()=>{if(answered)return;picked=[];drawOrder(q);};
+    $('#btn-check').onclick=()=>judgeOrder(q);
+  }else{
+    $('#ask').textContent=q.ask||(q.stem?ASK_BLANK:ASK_SENT);
+    const stem=q.stem?`<p class="stem">${esc(q.stem).replace('{}','<span class="blank" id="blank">\u3000</span>')}</p>`:'';
+    const isWords=q.words||!!q.stem;
+    const opts=shuffle(q.opts.slice());
+    body.innerHTML=stem+`<div class="opts ${isWords?'words':''}">`+
+      opts.map((o,i)=>`<button class="opt" data-o="${esc(o)}"><span class="k">${i+1}</span><span>${esc(o)}</span></button>`).join('')+`</div>`;
+    body.querySelectorAll('.opt').forEach(b=>b.onclick=()=>judgeChoice(q,b.dataset.o));
+  }
+}
+
+function drawOrder(q){
+  const build=$('#build'), pool=$('#pool');
+  build.innerHTML=(q.prefix?`<span class="fix">${esc(q.prefix)}</span>`:'')+
+    picked.map((t,i)=>`<button class="tok" data-i="${i}">${esc(t)}</button>`).join('')+
+    (q.suffix?`<span class="fix">${esc(q.suffix)}</span>`:'');
+  const rest=q._toks.slice(); picked.forEach(t=>{const k=rest.indexOf(t); if(k>-1) rest.splice(k,1);});
+  pool.innerHTML=rest.map(t=>`<button class="tok" data-t="${esc(t)}">${esc(t)}</button>`).join('');
+  build.querySelectorAll('.tok').forEach(b=>b.onclick=()=>{if(answered)return;picked.splice(+b.dataset.i,1);drawOrder(q);});
+  pool.querySelectorAll('.tok').forEach(b=>b.onclick=()=>{if(answered)return;picked.push(b.dataset.t);drawOrder(q);});
+  $('#btn-check').disabled=picked.length!==q.tokens.length;
+}
+
+function judgeOrder(q){
+  if(answered) return;
+  const ok=q.answers.includes(picked.join(''));
+  $('#build').classList.add(ok?'ok':'ng');
+  document.querySelectorAll('#build .tok').forEach(b=>b.disabled=true);
+  $('#btn-check').disabled=true; $('#btn-reset').disabled=true;
+  finish(q,ok,null);
+}
+
+function judgeChoice(q,o){
+  if(answered) return;
+  const ok=o===q.ans; const soft=!ok&&q.soft&&q.soft[o];
+  document.querySelectorAll('.opt').forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.o===q.ans) b.classList.add('ok');
+    else if(b.dataset.o===o) b.classList.add(soft?'soft':'ng');
+    else b.classList.add('dim');
+  });
+  const bl=$('#blank'); if(bl){bl.textContent=q.ans; bl.classList.add(ok?'ok':'ng');}
+  finish(q,ok,soft||null);
+}
+
+function finish(q,ok,soft){
+  answered=true; res[q.id]=ok;
+  combo=ok?combo+1:0; best=Math.max(best,combo);
+  $('#combo').textContent=combo>=3?`${combo}問連続正解`:'';
+  drawHud();
+  const full=q.full||q.ans;
+  const fb=$('#fb');
+  fb.className='fb '+(ok?'ok':soft?'soft':'ng');
+  const st=ok?(q.okMsg||'正解'):soft?soft:(q.ngMsg||'おしい。正しくはこちら');
+  const canSay='speechSynthesis' in window;
+  const left=inCat(q.cat).some(x=>!isDone(x));
+  const lbl=left?'次へ':allDone()?'結果を見る':'このセクションの結果へ';
+  fb.innerHTML=`<p class="st">${esc(st)}</p>
+    <div class="full"><span class="cn">${esc(full)}</span>${canSay?`<button class="say" id="btn-say" aria-label="読み上げ">🔊</button>`:''}</div>
+    ${q.zy&&q.zy.length?`<div class="zys">${q.zy.map(([hz,z])=>`<span class="zy"><span class="h">${esc(hz)}</span><span class="z">${esc(z)}</span></span>`).join('')}</div>`:''}
+    <ul>${q.exp.map(e=>`<li>${esc(e)}</li>`).join('')}</ul>
+    ${q.rec?`<a class="rec" href="${q.rec}" target="_blank" rel="noopener">🎧 この問題の先生の解説（録音）</a>`:''}
+    <button class="primary next" id="btn-next">${lbl}</button>`;
+  if(canSay) $('#btn-say').onclick=()=>speak(q.say||full);
+  $('#btn-next').onclick=next;
+  $('#btn-next').focus({preventScroll:true});
+  fb.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
+}
+
+function speak(t){
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang='zh-TW'; u.rate=.85;
+    const vs=speechSynthesis.getVoices();
+    const v=vs.find(v=>/zh[-_]TW/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang));
+    if(v) u.voice=v;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}
+
+/* ---------- section summary ---------- */
+function missHTML(list){
+  return list.map(q=>`<div class="miss"><span class="chip ${q.cat}">${CATS[q.cat].name}</span><span class="src">${esc(q.src)}</span>
+    <p class="cn" style="margin-top:6px">${esc(q.full||q.ans)}</p><p class="ex">${esc(q.exp[0])}</p></div>`).join('');
+}
+function showSec(c){
+  cur=null; secView=c; show('s-sec'); drawHud();
+  const qs=inCat(c), ok=qs.filter(q=>res[q.id]===true), miss=qs.filter(q=>res[q.id]===false);
+  $('#sec-chip').className='chip '+c; $('#sec-chip').textContent=CATS[c].full;
+  $('#sec-score').innerHTML=`${ok.length}<small> / ${qs.length}</small>`;
+  $('#sec-msg').textContent=miss.length?`間違えた${miss.length}問を確認して、もう一度挑戦しましょう。`:'このセクションは全問正解です。';
+  $('#sec-misses').innerHTML=missHTML(miss);
+  const nc=nextOpenCat(c);
+  let a='';
+  if(nc) a+=`<button class="primary" id="sa-next">次のセクションへ：${CATS[nc].full}</button>`;
+  else if(allDone()) a+=`<button class="primary" id="sa-result">全体の結果を見る</button>`;
+  if(miss.length) a+=`<button class="ghost" id="sa-miss">間違えた問題だけ、もう一度</button>`;
+  a+=`<button class="ghost" id="sa-redo">このセクションを最初から</button>`;
+  $('#sec-actions').innerHTML=a;
+  if(nc) $('#sa-next').onclick=()=>goSection(nc);
+  if($('#sa-result')) $('#sa-result').onclick=result;
+  if(miss.length) $('#sa-miss').onclick=()=>{miss.forEach(q=>delete res[q.id]);goSection(c);};
+  $('#sa-redo').onclick=()=>redoSection(c);
+}
+
+/* ---------- overall result ---------- */
+function result(){
+  cur=null; secView=null; show('s-result');
+  const total=seq.length, okN=seq.filter(q=>res[q.id]===true).length;
+  $('#score').innerHTML=`${okN}<small> / ${total}</small>`;
+  const rates={};
+  $('#rmeters').innerHTML=CAT_ORDER.map(k=>{
+    const qs=inCat(k), n=qs.filter(q=>res[q.id]===true).length; rates[k]=n/qs.length;
+    return `<button class="rm" data-cat="${k}"><span class="nm">${CATS[k].full}</span><span class="bar"><i style="width:0%" data-w="${Math.round(n/qs.length*100)}"></i></span><span class="v">${n}/${qs.length}</span></button>`;
+  }).join('');
+  document.querySelectorAll('#rmeters .rm').forEach(b=>b.onclick=()=>goSection(b.dataset.cat));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('#rmeters i').forEach(i=>i.style.width=i.dataset.w+'%')));
+
+  let msg;
+  if(okN===total){
+    msg='全問正解。3つの型は、もう崩れていません。次は量詞6つを声に出して、口でも言えるようにしましょう。';
+  }else{
+    const main=['q','t','p'];
+    const weakest=main.reduce((a,b)=>rates[b]<rates[a]?b:a);
+    msg=rates[weakest]<1
+      ?`いちばん伸びしろがあるのは <b>${CATS[weakest].full}</b>。知識は入っています。崩れるのは、日本語から順番に置き換えたときです。`
+      :'3つの型はクリア。残りは「型と自然さ」の細かいところだけです。';
+    msg+=`<div class="steps"><span>1 型を選ぶ</span><span>2 枠を書く</span><span>3 単語を入れる</span></div>`;
+  }
+  if(best>=5) msg+=`<p style="margin-top:8px;font-size:.85rem;color:var(--mute)">最高 ${best} 問連続正解。</p>`;
+  $('#msg').innerHTML=msg;
+
+  const missed=seq.filter(q=>res[q.id]===false);
+  $('#misswrap').classList.toggle('hidden',!missed.length);
+  $('#btn-retry').classList.toggle('hidden',!missed.length);
+  $('#misses').innerHTML=missHTML(missed);
+}
+
+$('#btn-retry').onclick=()=>{
+  seq.filter(q=>res[q.id]===false).forEach(q=>delete res[q.id]);
+  const c=CAT_ORDER.find(k=>firstOpen(k)); if(c) goSection(c);
+};
+$('#btn-again').onclick=()=>{newSession();goSection('q');};
+document.querySelectorAll('[data-menu]').forEach(b=>b.onclick=toMenu);
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&$('#s-start').classList.contains('hidden')){toMenu();return;}
+  if($('#s-play').classList.contains('hidden')) return;
+  if(!answered&&/^[1-4]$/.test(e.key)){const b=document.querySelectorAll('.opt')[+e.key-1]; if(b) b.click();}
+});
+
+drawMenu();
+</script>
+</body>
+</html>
