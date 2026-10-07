@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第21回 宿題 復習クイズ｜台灣華語</title>
+<style>
+:root{--navy:#2F3C7E;--coral:#F96167;--band:#F2F4FB;--grey:#5F6580;--line:#D9DEF0;--ok:#1E8E5A;--okbg:#E6F5EC;--ngbg:#FDECEC;--bg:#FAFBFE}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--navy);font-family:"Meiryo","Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.6}
+.zh{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC","Noto Sans CJK TC",sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+h1{font-size:19px;margin:0;line-height:1.35}
+h1 small{display:block;font-size:12px;color:var(--grey);font-weight:normal}
+.toggle{flex:none;border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:bold;cursor:pointer}
+.toggle[aria-pressed="false"]{border-color:var(--line);color:var(--grey)}
+.hbtn{display:flex;gap:8px;flex:none}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px}
+.lead{color:var(--grey);font-size:14px;margin:0 0 14px}
+.secs{display:grid;gap:10px}
+.sec{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;width:100%;border:1px solid var(--line);background:var(--band);border-radius:12px;padding:14px 16px;font:inherit;color:var(--navy);cursor:pointer}
+.sec b{font-size:15px}.sec span{font-size:12px;color:var(--grey);flex:none}
+.sec.all{background:var(--navy);color:#fff;border-color:var(--navy)}.sec.all span{color:#CADCFC}
+.sec:hover,.opt:hover:not(:disabled){border-color:var(--navy)}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:4px 0 14px}
+.bar i{display:block;height:100%;background:var(--coral);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:12px;color:var(--grey);font-weight:bold}
+.q{font-size:15px;font-weight:bold;margin:0 0 6px}
+.jp{font-size:14px;color:var(--grey);margin:0 0 10px}
+.sent{font-size:26px;font-weight:bold;margin:6px 0 16px;line-height:1.5}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;font:inherit;font-size:19px;font-weight:bold;color:var(--navy);cursor:pointer;text-align:left;line-height:1.5;min-height:54px}
+.opt.jpopt{font-size:15px;line-height:1.6}
+.opts.two .opt{text-align:center;font-size:24px}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--coral);background:var(--ngbg)}
+.opt:disabled{cursor:default}
+.rb{display:inline-flex;flex-direction:column;align-items:center;vertical-align:bottom;min-width:1.62em;line-height:1.25}
+.rb.pn{min-width:.8em}
+.rb i{font-style:normal;font-size:max(.44em,9.5px);color:var(--coral);font-weight:normal;height:1.4em;white-space:nowrap}
+body.nozy .rb i{visibility:hidden}
+.blank{color:var(--coral)}
+.fb{margin-top:16px;border-radius:12px;padding:14px 16px;font-size:14px}
+.fb.ok{background:var(--okbg)}.fb.ng{background:var(--ngbg)}
+.fb strong{display:block;font-size:15px;margin-bottom:4px}
+.fb .full{font-size:21px;font-weight:bold;margin:4px 0 6px}
+.btn{margin-top:16px;width:100%;border:0;background:var(--navy);color:#fff;border-radius:12px;padding:14px;font:inherit;font-size:15px;font-weight:bold;cursor:pointer}
+.btn.sub{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.score{text-align:center}
+.score .num{font-size:52px;font-weight:bold;line-height:1.2}.score .num small{font-size:20px;color:var(--grey)}
+.score p{margin:4px 0 0;color:var(--grey);font-size:14px}
+.miss{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+.miss h2{font-size:14px;margin:0 0 8px}
+.miss li{margin:0 0 12px;font-size:13px;color:var(--grey)}
+.miss .full{display:block;font-size:19px;font-weight:bold;color:var(--navy);margin:4px 0}
+.miss ol{padding-left:20px;margin:0}
+@media(max-width:480px){.sent{font-size:22px}.opt{font-size:17px}.opts.two .opt{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>第21回 宿題 復習クイズ<small>2026/09/09 の宿題まとめ ＋「不」と「沒」</small></h1>
+    <div class="hbtn"><button class="toggle" id="menu" hidden>☰ メニュー</button><button class="toggle" id="zy" aria-pressed="true">注音 ON</button></div>
+  </header>
+  <main id="app" class="card"></main>
+</div>
+<script>
+// ---- 注音辞書（このクイズで使う字だけ） ----
+const ZY={這:'ㄓㄜˋ',台:'ㄊㄞˊ',張:'ㄓㄤ',件:'ㄐㄧㄢˋ',杯:'ㄅㄟ',支:'ㄓ',個:'˙ㄍㄜ',電:'ㄉㄧㄢˋ',腦:'ㄋㄠˇ',我:'ㄨㄛˇ',用:'ㄩㄥˋ',了:'˙ㄌㄜ',五:'ㄨˇ',年:'ㄋㄧㄢˊ',衣:'ㄧ',服:'ㄈㄨˊ',買:'ㄇㄞˇ',三:'ㄙㄢ',十:'ㄕˊ',二:'ㄦˋ',月:'ㄩㄝˋ',人:'ㄖㄣˊ',去:'ㄑㄩˋ',名:'ㄇㄧㄥˊ',古:'ㄍㄨˇ',屋:'ㄨ',玩:'ㄨㄢˊ',太:'ㄊㄞˋ',的:'˙ㄉㄜ',日:'ㄖˋ',文:'ㄨㄣˊ',越:'ㄩㄝˋ',來:'ㄌㄞˊ',好:'ㄏㄠˇ',很:'ㄏㄣˇ',昨:'ㄗㄨㄛˊ',天:'ㄊㄧㄢ',看:'ㄎㄢˋ',兩:'ㄌㄧㄤˇ',小:'ㄒㄧㄠˇ',時:'ㄕˊ',視:'ㄕˋ',剛:'ㄍㄤ',星:'ㄒㄧㄥ',期:'ㄑㄧˊ',才:'ㄘㄞˊ',算:'ㄙㄨㄢˋ',滿:'ㄇㄢˇ',到:'ㄉㄠˋ',今:'ㄐㄧㄣ',半:'ㄅㄢˋ',就:'ㄐㄧㄡˋ',都:'ㄉㄡ',還:'ㄏㄞˊ',為:'ㄨㄟˋ',什:'ㄕㄣˊ',麼:'˙ㄇㄜ',回:'ㄏㄨㄟˊ',嗎:'˙ㄇㄚ',假:'ㄐㄧㄚˋ',特:'ㄊㄜˋ',休:'ㄒㄧㄡ',請:'ㄑㄧㄥˇ',投:'ㄊㄡˊ',票:'ㄆㄧㄠˋ',選:'ㄒㄩㄢˇ',舉:'ㄐㄩˇ',灣:'ㄨㄢ',可:'ㄎㄜˇ',惜:'ㄒㄧˊ',公:'ㄍㄨㄥ',司:'ㄙ',明:'ㄇㄧㄥˊ',吃:'ㄔ',過:'ㄍㄨㄛˋ',臭:'ㄔㄡˋ',豆:'ㄉㄡˋ',腐:'ㄈㄨˇ',喝:'ㄏㄜ',酒:'ㄐㄧㄡˇ',晚:'ㄨㄢˇ',餐:'ㄘㄢ',沒:'ㄇㄟˊ',有:'ㄧㄡˇ',錢:'ㄑㄧㄢˊ',乾:'ㄍㄢ',脆:'ㄘㄨㄟˋ'};
+// 変調：不＋第4声→ㄅㄨˊ／一個→ㄧˊ／太太の2字目は軽声
+function zy(s,i){const c=s[i],n=s[i+1],p=s[i-1];
+  if(c==='不') return (ZY[n]||'').endsWith('ˋ')?'ㄅㄨˊ':'ㄅㄨˋ';
+  if(c==='一') return n==='個'?'ㄧˊ':'ㄧ';
+  if(c==='太'&&p==='太') return '˙ㄊㄞ';
+  return ZY[c]||'';}
+function R(s){let h='';for(let i=0;i<s.length;i++){const c=s[i],z=zy(s,i);
+  if(c==='＿') h+='<span class="rb"><i></i><span class="blank">＿</span></span>';
+  else h+=`<span class="rb${z?'':' pn'}"><i>${z}</i><span>${c}</span></span>`}return h}
+
+// ---- 問題 ----  t:'fill'=穴埋め / 'pick'=正しい文を選ぶ / 'mean'=意味・読み
+const SECS=[
+ {id:'kata',name:'① 重点と5つの型',qs:[
+  {t:'fill',s:'這＿電腦我用了五年了。',jp:'このパソコンは5年使っています。',a:'台',o:['張','件','杯'],full:'這台電腦我用了五年了。',ex:'パソコンなどの機械の量詞は「台」。「這」の後ろは必ず量詞を入れます。'},
+  {t:'fill',s:'這＿衣服我買了三年了。',jp:'この服は買って3年になります。',a:'件',o:['台','張','支'],full:'這件衣服我買了三年了。',ex:'服の量詞は「件」。'},
+  {t:'pick',jp:'12月に、私は一人で名古屋へ遊びに行きます。',a:'十二月我一個人去名古屋玩。',o:['十二月我一個人去名古屋。','十二月我一個人玩去名古屋。','我一個人去名古屋玩十二月。'],ex:'「去＋場所」で止めず、何をしに行くか（玩）まで言います。時点（十二月）は動詞の前。'},
+  {t:'pick',jp:'妻の日本語は、どんどん上手になっています。',a:'我太太的日文越來越好。',o:['我太太的日文越來越很好。','我太太的日文很越來越好。'],ex:'「越來越＋形容詞」。「很」は付けません。'},
+  {t:'pick',jp:'昨日、2時間テレビを見ました。',a:'我昨天看了兩個小時的電視。',o:['我看了昨天兩個小時的電視。','我兩個小時昨天看了電視。'],ex:'時点（昨天）は動詞の前、時間の長さ（兩個小時）は動詞の後ろ。'}]},
+ {id:'hyogen',name:'② 日本語→中国語の表現',qs:[
+  {t:'fill',s:'＿一個星期。',jp:'ちょうど一週間です。',a:'剛好',o:['可惜','乾脆','越來越'],full:'剛好一個星期。',ex:'「剛好」＝ちょうど。数字の前に置きます。'},
+  {t:'fill',s:'我到今年十一月＿滿半年。',jp:'今年の11月で、やっと勤続半年になります。',a:'才',o:['就','都','還'],full:'我到今年十一月才滿半年。',ex:'「才」＝やっと。'},
+  {t:'pick',jp:'どうして11月に帰るんですか。',a:'為什麼十一月回去？',o:['為什麼十一月回去嗎？','十一月為什麼回去嗎？'],ex:'疑問詞（為什麼）のある文に「嗎」は付けません。'},
+  {t:'fill',s:'假期都＿特休。',jp:'休みは全部、有給扱いになります。',a:'算',o:['滿','請','才'],full:'假期都算特休。',ex:'「算」＝〜とみなす、〜扱いになる。'},
+  {t:'fill',s:'我太太＿回台灣。',jp:'妻は休みを取って台湾に帰ります。',a:'請假',o:['特休','投票','選舉'],full:'我太太請假回台灣。',ex:'「請假＋回台灣」と動詞を続けます。'}]},
+ {id:'goi',name:'③ 語彙チェック',qs:[
+  {t:'mean',w:'特休',q:'意味は？',a:'有給休暇',o:['休みを取る','選挙','惜しい、残念だ'],ex:'台灣の言い方。日本語式の「年休」とは言いません。'},
+  {t:'mean',w:'可惜',q:'意味は？',a:'惜しい、残念だ',o:['ちょうど','ますます〜','投票する'],ex:''},
+  {t:'mean',w:'選挙',q:'中国語では？',plain:true,zhopt:true,a:'選舉',o:['投票','請假','特休'],ex:'「投票」は「投票する」。'},
+  {t:'mean',w:'請假',q:'注音は？',plain:true,a:'ㄑㄧㄥˇ ㄐㄧㄚˋ',o:['ㄑㄧㄥˊ ㄐㄧㄚˇ','ㄑㄧㄥ ㄐㄧㄚ','ㄐㄧㄥˇ ㄑㄧㄚˋ'],ex:'請（3声）＋假（4声）。意味は「休みを取る」。'},
+  {t:'mean',w:'滿半年',q:'意味は？',a:'（勤続が）半年になる',o:['半年休む','半年前','あと半年'],ex:''}]},
+ {id:'bumei',name:'④「不」と「沒」',qs:[
+  {t:'fill',two:true,s:'我昨天＿去公司。',jp:'昨日は会社に行きませんでした。',a:'沒',o:['不'],full:'我昨天沒去公司。',ex:'「行く」という行為が起きなかった → 沒。'},
+  {t:'fill',two:true,s:'我＿喝酒。',jp:'お酒は飲みません。（習慣）',a:'不',o:['沒'],full:'我不喝酒。',ex:'習慣・意思の否定 → 不。'},
+  {t:'fill',two:true,s:'我還＿吃晚餐。',jp:'まだ晩ご飯を食べていません。',a:'沒',o:['不'],full:'我還沒吃晚餐。',ex:'まだ完了していない → 還沒。「沒」は過去専用ではありません。'},
+  {t:'pick',jp:'行ったことがない',a:'沒去過',o:['不去過','沒去了','不去'],ex:'経験の否定は「沒＋動詞＋過」。'},
+  {t:'fill',two:true,s:'我＿有錢。',jp:'お金がありません。',a:'沒',o:['不'],full:'我沒有錢。',ex:'「有」の否定は必ず「沒」。「不有」とは言いません。'}]}
+];
+const ALL=SECS.flatMap(s=>s.qs.map(q=>({...q,sec:s.name})));
+const app=document.getElementById('app');
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let list=[],idx=0,score=0,miss=[];
+
+document.getElementById('zy').onclick=e=>{const on=document.body.classList.toggle('nozy');e.target.setAttribute('aria-pressed',!on);e.target.textContent='注音 '+(on?'OFF':'ON')};
+
+const menuBtn=document.getElementById('menu');menuBtn.onclick=()=>home();
+function home(){
+  menuBtn.hidden=true;
+  app.innerHTML=`<p class="lead">前回の宿題の内容を、選択式で確認します。出題範囲を選んでください。</p><div class="secs">
+  <button class="sec all" data-i="-1"><b>全部まとめて</b><span>${ALL.length}問</span></button>
+  ${SECS.map((s,i)=>`<button class="sec" data-i="${i}"><b>${s.name}</b><span>${s.qs.length}問</span></button>`).join('')}</div>`;
+  app.querySelectorAll('.sec').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;start(i<0?ALL:ALL.filter(q=>q.sec===SECS[i].name))});
+}
+function start(qs){menuBtn.hidden=false;list=qs;idx=0;score=0;miss=[];show()}
+function answerText(q){return q.t==='fill'?q.full:q.t==='pick'?q.a:q.w}
+function show(){
+  const q=list[idx],isZh=q.t!=='mean'||q.zhopt,opts=q.two?[q.a,...q.o].sort((a,b)=>a==='不'?-1:1):sh([q.a,...q.o]);
+  let head='';
+  if(q.t==='fill') head=`<p class="q">＿ に入るのは？</p><p class="jp">${q.jp}</p><div class="sent zh">${R(q.s)}</div>`;
+  if(q.t==='pick') head=`<p class="q">正しい中国語はどれ？</p><div class="sent" style="font-size:18px;line-height:1.7">${q.jp}</div>`;
+  if(q.t==='mean') head=`<p class="q">${q.q}</p><div class="sent zh">${q.plain?q.w:R(q.w)}</div>`;
+  app.innerHTML=`<div class="meta"><span>${q.sec}</span><span>${idx+1} / ${list.length}</span></div>
+  <div class="bar"><i style="width:${idx/list.length*100}%"></i></div>${head}
+  <div class="opts ${q.two?'two':''}">${opts.map(o=>`<button class="opt ${isZh?'zh':'jpopt'}" data-v="${o}">${isZh?R(o):o}</button>`).join('')}</div><div id="fb"></div>`;
+  app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pick(b,q));
+}
+function pick(b,q){
+  const ok=b.dataset.v===q.a;
+  app.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.dataset.v===q.a)x.classList.add('right')});
+  if(ok)score++;else{b.classList.add('wrong');miss.push(q)}
+  const full=q.t==='fill'?`<div class="full zh">${R(q.full)}</div>`:'';
+  document.getElementById('fb').innerHTML=`<div class="fb ${ok?'ok':'ng'}"><strong>${ok?'⭕ 正解！':'❌ おしい！'}</strong>${full}${q.ex||''}</div>
+  <button class="btn" id="next">${idx+1<list.length?'次へ':'結果を見る'}</button>`;
+  document.getElementById('next').onclick=()=>{idx++;idx<list.length?show():result()};
+  document.getElementById('next').focus();
+}
+function result(){
+  const n=list.length,msg=score===n?'全問正解！素晴らしいです。':score>=n*0.8?'よくできました。あと少しです。':'間違えた問題をもう一度確認しましょう。';
+  app.innerHTML=`<div class="score"><div class="num">${score}<small> / ${n}</small></div><p>${msg}</p></div>
+  ${miss.length?`<div class="miss"><h2>間違えた問題</h2><ol>${miss.map(q=>`<li>${q.jp||q.w+'：'+q.q}<span class="full zh">${q.t==='mean'&&!q.zhopt?q.a:R(answerText(q)==q.w?q.a:answerText(q))}</span>${q.ex||''}</li>`).join('')}</ol></div>
+  <button class="btn" id="again">間違えた問題だけもう一度</button>`:''}
+  <button class="btn sub" id="home">最初に戻る</button>`;
+  const m=[...miss];if(m.length)document.getElementById('again').onclick=()=>start(m);
+  document.getElementById('home').onclick=home;
+}
+home();
+</script>
+</body>
+</html>
